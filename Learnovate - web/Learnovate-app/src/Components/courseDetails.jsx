@@ -73,7 +73,6 @@ function CourseDetails() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    // Simulate course fetching
     const foundCourse = courses.find(c => c.id === parseInt(id));
     if (foundCourse) {
       setCourse(foundCourse);
@@ -84,7 +83,6 @@ function CourseDetails() {
   const handleVideoSelect = (module) => {
     if (module.free || isEnrolled) {
       setCurrentVideo(module);
-      // Close sidebar on mobile after selection
       setIsSidebarOpen(false);
     } else {
       alert("Enroll in the course to access this module!");
@@ -97,7 +95,6 @@ function CourseDetails() {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
-      {/* Mobile Header with Sidebar Toggle */}
       <div className="md:hidden bg-white shadow-md p-4 flex justify-between items-center">
         <h2 className="text-lg font-bold">{course.title}</h2>
         <button 
@@ -108,9 +105,7 @@ function CourseDetails() {
         </button>
       </div>
 
-      {/* Sidebar - Playlist */}
       <div className={`fixed inset-0 z-40 md:static md:block md:w-80 bg-white border-r shadow-md transform transition-transform duration-300 ease-in-out${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}md:translate-x-0 overflow-y-auto`}>
-        {/* Close button for mobile */}
         <button 
           onClick={() => setIsSidebarOpen(false)}
           className="md:hidden absolute top-4 right-4 p-2 bg-gray-100 rounded-full"
@@ -121,7 +116,6 @@ function CourseDetails() {
         <div className="p-4">
           <h2 className="text-xl font-bold mb-4 hidden md:block">{course.title}</h2>
           
-          {/* Course Overview */}
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-600">{course.instructor}</span>
@@ -139,7 +133,6 @@ function CourseDetails() {
             </div>
           </div>
 
-          {/* Course Modules/Playlist */}
           <div>
             <h3 className="font-semibold mb-2">Course Content</h3>
             {course.modules.map((module) => (
@@ -166,7 +159,6 @@ function CourseDetails() {
             ))}
           </div>
 
-          {/* Enroll Button */}
           {!isEnrolled && (
             <button 
               onClick={() => setIsEnrolled(true)}
@@ -178,7 +170,6 @@ function CourseDetails() {
         </div>
       </div>
 
-      {/* Overlay for mobile sidebar */}
       {isSidebarOpen && (
         <div 
           className="fixed inset-0 z-30 bg-black opacity-50 md:hidden"
@@ -186,7 +177,6 @@ function CourseDetails() {
         />
       )}
 
-      {/* Main Content - Video Player */}
       <div className="flex-1 p-4 md:p-8 overflow-y-auto">
         <div className="bg-black rounded-xl overflow-hidden shadow-lg mb-6">
           {currentVideo && (
@@ -202,12 +192,9 @@ function CourseDetails() {
           )}
         </div>
 
-        {/* Video Details */}
         <div className="px-2 md:px-0">
           <h2 className="text-xl md:text-2xl font-bold mb-2">{currentVideo?.title}</h2>
           <p className="text-sm md:text-base text-gray-600 mb-4">{course.description}</p>
-
-          {/* Additional Course Info */}
           <div className="flex flex-wrap items-center text-xs md:text-sm text-gray-500 space-x-2 md:space-x-4">
             <span className="mb-1 md:mb-0">Level: {course.difficulty}</span>
             <span className="mb-1 md:mb-0">Lectures: {course.lectures}</span>

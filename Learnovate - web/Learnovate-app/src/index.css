@@ -8,8 +8,11 @@ body {
   font-family: 'Inter', sans-serif;
   @apply bg-white text-cyan-800;
 }
+::-webkit-scrollbar {
+  display: none; 
+}
 
-/* Custom global styles */
-.cosmic-gradient {
-  background: wheat;
+html {
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
 }

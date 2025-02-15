@@ -10,23 +10,22 @@ import CourseDetails from './Components/courseDetails';
 
 function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Header />
+
+    <div className="flex flex-col min-h-screen">
+      <Router>
+        <Header/>
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/courses" element={<Courses />} />
             <Route path="/instructors" element={<Instructors />} />
             <Route path="/about" element={<About />} />
-            <Route path="/" element={<Courses />} />
+            <Route path="/courses" element={<Courses />} />
             <Route path="/course/:id" element={<CourseDetails />} />
           </Routes>
         </main>
-        <Footer />
-      </div>
-    </Router>
+        <Footer/>
+      </Router>
+    </div>
   );
 }
-
 export default App;

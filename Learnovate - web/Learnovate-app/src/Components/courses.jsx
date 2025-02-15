@@ -34,12 +34,12 @@ const courses = [
 ];
 
 function Courses() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
   const navigate = useNavigate();
 
-  const filteredCourses = courses.filter(course => 
-    course.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+  const filteredCourses = courses.filter((course) => 
+    course.title.toLowerCase().includes(search.toLowerCase()) &&
     (filter === 'All' || course.category === filter)
   );
 
@@ -54,8 +54,8 @@ function Courses() {
           type="text" 
           placeholder="Search Courses..." 
           className="w-full p-3 rounded-lg border border-purple-300 focus:ring-2 focus:ring-purple-500"
-          value={searchTerm}
-          onChange={(t) => setSearchTerm(t.target.value)}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <select 
           value={filter}
@@ -67,7 +67,7 @@ function Courses() {
           <option value="Advanced">Advanced</option>
         </select>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
         {filteredCourses.map(course => (
           <motion.div
             key={course.id}
@@ -86,15 +86,12 @@ function Courses() {
                 <span className="text-sm text-gray-600 truncate">
                   {course.instructor}
                 </span>
-                <span className={`
-                  px-2 py-1 rounded text-xs 
-                  ${course.free ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}
-                `}>
+                <span className="px-2 py-1 rounded text-xs">
                   {course.free ? 'FREE' : `$${course.price}`}
                 </span>
               </div>
               <div className="flex justify-between text-xs text-gray-600">
-                <span><Star size={14} className="inline mr-1" />{course.rating}</span>
+                <span><Star size={16} className="inline mr-1" />{course.rating} </span>
                 <span>{course.lectures} Lectures</span>
                 <span>{course.difficulty}</span>
               </div>

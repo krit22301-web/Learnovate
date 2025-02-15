@@ -25,7 +25,7 @@ function About() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="rounded-xl shadow-lg flex items-center justify-center h-full"
+            className="rounded-xl shadow-lg flex items-center justify-center h-full hover:cursor-pointer"
           >
             <div className="bg-cyan-900 p-4 sm:p-6 rounded-xl text-center flex flex-col justify-center h-full">
               <Target className="mx-auto mb-4" size={48} />
@@ -43,7 +43,7 @@ function About() {
           </motion.div>
 
 
-          <motion.div whileHover={{ scale: 1.05 }} className="rounded-xl shadow-lg h-full">
+          <motion.div whileHover={{ scale: 1.05 }} className="rounded-xl shadow-lg h-full hover:cursor-pointer">
             <div className="bg-cyan-900 p-4 sm:p-6 rounded-xl text-center flex flex-col justify-center h-full">
               <Earth className="mx-auto mb-4" size={48} />
               <h3 className="text-xl sm:text-2xl font-semibold mb-4">Global Reach</h3>
@@ -57,7 +57,7 @@ function About() {
             </div>
           </motion.div>
 
-          <motion.div whileHover={{ scale: 1.05 }} className="rounded-xl shadow-lg h-full">
+          <motion.div whileHover={{ scale: 1.05 }} className="rounded-xl shadow-lg h-full hover:cursor-pointer">
             <div className="bg-cyan-900 p-6 rounded-xl text-center flex flex-col justify-between h-full">
               <Telescope className="mx-auto mb-4" size={48} />
               <h3 className="text-xl sm:text-2xl font-semibold mb-4">Our Vision</h3>
@@ -89,7 +89,8 @@ function About() {
                 <img src={p1} className="w-32 h-32 rounded-full object-cover" />
                 <h3 className="text-xl sm:text-2xl font-semibold mb-2">Om Swami</h3>
                 <p className="text-sm sm:text-base">
-                  I can't express how much Learnovate has helped me grow professionally. The courses are incredibly well-structured, and the instructors are experts in their fields. I completed a data science course here, and it gave me the confidence to land my dream job. Highly recommended for anyone looking to upskill!</p>
+                  Learnovate helped me grow professionally. The courses are structured well, and the instructors are experts. I completed a data science course and landed my dream job. Highly recommended for upskilling!
+                </p>
               </div>
             </SwiperSlide>
             <SwiperSlide>
@@ -97,14 +98,17 @@ function About() {
                 <img src={p2} className="w-32 h-32 rounded-full object-cover" />
                 <h3 className="text-xl sm:text-2xl font-semibold mb-2">Shubhi Bhanagar</h3>
                 <p className="text-sm sm:text-base">
-                  Learnovate's platform is super user-friendly, and the content is engaging and easy to follow. I loved the interactive quizzes and real-world projects—they made learning so much more enjoyable. I went from being a beginner in programming to building my own apps in just a few months!</p>
-              </div></SwiperSlide>
+                  The platform is user-friendly, and the content is engaging. The interactive quizzes and projects made learning fun. I went from a beginner in programming to building my own apps within months.
+                </p>
+              </div>
+            </SwiperSlide>
             <SwiperSlide>
               <div className="bg-cyan-900 p-4 sm:p-6 flex flex-col justify-center items-center text-center">
                 <img src={p3} className="w-32 h-32 rounded-full object-cover" />
                 <h3 className="text-xl sm:text-2xl font-semibold mb-2">Aditya Mishra</h3>
                 <p className="text-sm sm:text-base">
-                  The quality of the courses is top-notch, and the instructors are fantastic. However, I'd love to see more personalized feedback on assignments. That said, I still learned a lot and will definitely take more courses in the future!</p>
+                  The courses are high quality, and the instructors are great. More personalized feedback on assignments would be helpful, but I still gained a lot. I’ll definitely enroll in more courses here.
+                </p>
               </div>
             </SwiperSlide>
             <SwiperSlide>
@@ -112,7 +116,8 @@ function About() {
                 <img src={p4} className="w-32 h-32 rounded-full object-cover" />
                 <h3 className="text-xl sm:text-2xl font-semibold mb-2">Kartik Tyagi</h3>
                 <p className="text-sm sm:text-base">
-                  As someone from a remote area, I never thought I'd have access to such high-quality education. Learnovate changed that for me. The global reach of this platform is impressive, and I feel like I’m part of an international community of learners. Thank you for making education so accessible!</p>
+                  As someone from a remote area, I never thought I'd access such education. Learnovate connected me to a global learning community, making quality education more accessible than ever before.
+                </p>
               </div>
             </SwiperSlide>
           </Swiper>

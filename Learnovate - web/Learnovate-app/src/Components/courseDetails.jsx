@@ -76,7 +76,7 @@ function CourseDetails() {
       setCourse(foundCourse);
       setCurrentVideo(foundCourse.modules[0]);
     }
-  }, [id]);
+  } , [id]);
 
   const handleVideoSelect = (module) => {
     if (module.free || isEnrolled) {
@@ -97,8 +97,8 @@ function CourseDetails() {
         {currentVideo && (
           <ReactPlayer 
           url={currentVideo.videoUrl} 
-          width="100%" 
-          height="auto" 
+          width="100%"
+          height="auto"
           controls
           playing
         />
@@ -114,12 +114,12 @@ function CourseDetails() {
       {course.modules.map((module) => (
         <div
           key={module.id}
-          className="flex justify-between items-center p-3 mb-2 rounded-lg cursor-pointe"
+          className="flex justify-between items-center p-3 mb-2 rounded-lg cursor-pointer"
           onClick={() => handleVideoSelect(module)}
         >
           <div className="flex items-center">
             {module.free || isEnrolled ? <Play size={16} className="mr-2 text-purple-600" /> : <Lock size={16} className="mr-2 text-gray-400" />}
-            <span className="text-sm truncate max-w-[200px]">{module.title}</span>
+            <span>{module.title}</span>
           </div>
           <span className="text-xs text-gray-500">{module.duration}</span>
         </div>
@@ -127,7 +127,7 @@ function CourseDetails() {
       {!isEnrolled && (
         <button
           onClick={() => setIsEnrolled(true)}
-          className="w-full mt-4 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
+          className="w-full mt-4 bg-blue-700 text-white py-2 rounded-lg hover:bg-cyan-300"
         >
           Enroll Now
         </button>

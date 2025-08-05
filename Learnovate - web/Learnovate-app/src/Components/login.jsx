@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function Login({ onLoginSuccess }) {
+export default function Login() {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState([]);
-  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors([]);
-    setMessage('');
   };
 
   const handleSubmit = async e => {
@@ -26,10 +26,11 @@ export default function Login({ onLoginSuccess }) {
     if (!res.ok) {
       setErrors([data.message || 'Login failed']);
     } else {
-      setErrors([]);
-      setMessage('Login successful!');
-      setFormData({ username: '', password: '' });
-      if (onLoginSuccess) onLoginSuccess(data.user);
+      // ✅ Save username for header
+      localStorage.setItem('username', data.user.username);
+
+      // ✅ Redirect to home
+      navigate('/');
     }
   };
 
@@ -40,49 +41,30 @@ export default function Login({ onLoginSuccess }) {
 
         {errors.length > 0 && (
           <div className="mb-4 p-3 bg-red-500 bg-opacity-30 text-red-200 rounded">
-            <ul>
-              {errors.map((err, i) => (
-                <li key={i}>{err}</li>
-              ))}
-            </ul>
+            <ul>{errors.map((err, i) => <li key={i}>{err}</li>)}</ul>
           </div>
         )}
 
-        {message && <p className="mb-4 text-green-300">{message}</p>}
-
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-1 font-medium" htmlFor="username">Username</label>
-            <input
-              name="username"
-              id="username"
-              type="text"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              className="w-full border border-gray-500 rounded px-3 py-2 bg-transparent text-white placeholder-gray-300 focus:ring focus:ring-blue-500"
-              placeholder="Enter your username"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1 font-medium" htmlFor="password">Password</label>
-            <input
-              name="password"
-              id="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full border border-gray-500 rounded px-3 py-2 bg-transparent text-white placeholder-gray-300 focus:ring focus:ring-blue-500"
-              placeholder="Enter your password"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-          >
+          <input
+            name="username"
+            type="text"
+            value={formData.username}
+            onChange={handleChange}
+            required
+            placeholder="Username"
+            className="w-full border border-gray-500 rounded px-3 py-2 bg-transparent text-white placeholder-gray-300 focus:ring focus:ring-blue-500"
+          />
+          <input
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            placeholder="Password"
+            className="w-full border border-gray-500 rounded px-3 py-2 bg-transparent text-white placeholder-gray-300 focus:ring focus:ring-blue-500"
+          />
+          <button type="submit" className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
             Login
           </button>
         </form>

@@ -43,7 +43,7 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-      console.log('Attempting logout...'); // Debug log
+      console.log('Attempting logout...');
       
       const response = await fetch('https://backend-test-k5py.onrender.com/user/logout', {
         method: 'POST',
@@ -53,16 +53,15 @@ function Header() {
         }
       });
 
-      console.log('Logout response status:', response.status); // Debug log
+      console.log('Logout response status:', response.status); 
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Logout successful:', data); // Debug log
+        console.log('Logout successful:', data); 
         
         setUsername(null);
         localStorage.removeItem('username');
         setIsMenuOpen(false);
-        // Redirect to home page after logout
         window.location.href = '/';
       } else {
         const errorData = await response.text();

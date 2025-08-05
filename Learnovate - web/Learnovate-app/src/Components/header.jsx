@@ -13,7 +13,7 @@ function Header() {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch('https://your-render-backend-url.com/user/verify', {
+      const response = await fetch('https://backend-test-k5py.onrender.com/user/verify', {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -43,7 +43,9 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('https://your-render-backend-url.com/user/logout', {
+      console.log('Attempting logout...'); // Debug log
+      
+      const response = await fetch('https://backend-test-k5py.onrender.com/user/logout', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -51,19 +53,31 @@ function Header() {
         }
       });
 
+      console.log('Logout response status:', response.status); // Debug log
+      
       if (response.ok) {
+        const data = await response.json();
+        console.log('Logout successful:', data); // Debug log
+        
         setUsername(null);
         localStorage.removeItem('username');
         setIsMenuOpen(false);
         // Redirect to home page after logout
         window.location.href = '/';
       } else {
-        console.error('Logout failed');
-        alert('Logout failed. Please try again.');
+        const errorData = await response.text();
+        console.error('Logout failed:', response.status, errorData);
+        alert(`Logout failed: ${response.status} - ${errorData}`);
       }
     } catch (error) {
-      console.error('Logout error:', error);
-      alert('Logout error occurred. Please try again.');
+      console.error('Logout error details:', error);
+      alert(`Logout error: ${error.message}`);
+      
+      // Fallback: Clear local state even if server request fails
+      setUsername(null);
+      localStorage.removeItem('username');
+      setIsMenuOpen(false);
+      window.location.href = '/';
     }
   };
 

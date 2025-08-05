@@ -4,9 +4,10 @@ import {
   Twitter, 
   Facebook, 
   Linkedin, 
-  Mail, 
-  MapPin, 
-  Phone 
+  Mail,
+  MapPin,
+  Phone,
+  Github
 } from 'lucide-react';
 import {Link} from 'react-router-dom'
 
@@ -54,6 +55,7 @@ function Footer() {
               <Link to="#" className="hover:text-blue-300"><Twitter size={20} /></Link>
               <Link to="#" className="hover:text-blue-300"><Facebook size={20} /></Link>
               <Link to="#" className="hover:text-blue-300"><Linkedin size={20} /></Link>
+              <Link to="#" className="hover:text-blue-300"><Github size={20} /></Link>
             </div>
           </div>
         </div>
@@ -62,7 +64,7 @@ function Footer() {
           <p className="text-sm text-center">
             © {new Date().getFullYear()} Learnovate. All Rights Reserved.
             <span className="block sm:inline sm:ml-4">
-              <Link to="#" className="hover:underline">Privacy Policy</Link> | 
+              <Link to="#" className="hover:underline">Privacy Policy</Link> |
               <Link to="#" className="ml-2 hover:underline">Terms of Service</Link>
             </span>
           </p>

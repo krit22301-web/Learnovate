@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Rocket, Book, Users } from 'lucide-react';
+import { Book, Users, Computer } from 'lucide-react';
 
 function Home() {
   return (
@@ -16,37 +16,28 @@ function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {[
             {
-              icon: <Rocket size={100} className="mx-auto mb-4  pd-" />,
+              icon: <Computer size={200} className="mx-auto mb-4  pd-" />,
               title: "Tech Courses",
-              link: "/courses",
-              bgClass: "bg-blue-500 hover:bg-blue-900"
+              link: "/courses"
             },
             {
-              icon: <Book size={100} className="mx-auto mb-4" />,
+              icon: <Book size={200} className="mx-auto mb-4" />,
               title: "Explore Subjects & Reviews",
               link: "/about",
-              bgClass: "bg-blue-500 hover:bg-blue-900"
             },
             {
-              icon: <Users size={100} className="mx-auto mb-4" />,
+              icon: <Users size={200} className="mx-auto mb-4" />,
               title: "Meet Experts",
-              link: "/instructors",
-              bgClass: "bg-blue-500 hover:bg-blue-900"
+              link: "/instructors"
             }
           ].map((item, index) => (
-            <div
+            <Link to={item.link}
               key={index}
-              className="bg-white/10 p-6 rounded-xl transform transition-all hover:scale-105"
+              className="bg-white/10 p-6 rounded-xl hover:scale-105"
             >
               {item.icon}
-              <h3 className="text-xl font-semibold mb-4">{item.title}</h3>
-              <Link
-                to={item.link}
-                className={`px-6 py-2 rounded-full text-white transition-colors${item.bgClass}`}
-              >
-                Explore
-              </Link>
-            </div>
+              <h3 className="text-xl font-semibold mb-4">{item.title}</h3> 
+            </Link>
           ))}
         </div>
       </div>

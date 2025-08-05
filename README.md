@@ -1,128 +1,154 @@
-<!-- Auto-generated README using AI RAG -->
-<!-- Generated on: 2025-07-29T17:52:36.467Z -->
-
 # Learnovate: An Online Learning Platform
 
 ## Description
 
-Learnovate is a web application built with React, providing an online learning experience.  It features course listings, detailed course pages with video lectures, instructor profiles, and an about page.  The application allows users to browse courses, filter by level (Beginner/Advanced), search for courses by title, and view details including instructor, price, rating, and lecture count.  A user can also "enroll" in a course (simulated in this version) to unlock access to all modules.
+Learnovate is a web application providing online courses.  The project consists of a frontend built with React, Tailwind CSS, and React Router, and a backend built with Node.js, Express.js, and MongoDB. The frontend offers course browsing, user authentication, and course details. The backend handles user registration, login, authentication verification, and logout functionalities.
 
 ## Features
 
-* **Course Catalog:** Browse and search a catalog of courses.
-* **Course Details:** View detailed information about individual courses, including video lectures, descriptions, instructor information, and ratings.
-* **Instructor Profiles:** View profiles of instructors with their specialties and biographies.
-* **Filtering and Searching:** Filter courses by difficulty level and search by course title.
-* **Module Access:**  Simulated enrollment system to unlock access to paid course modules.
-* **Responsive Design:** Adapts to different screen sizes.
+* **User Authentication:** Secure user registration and login using bcrypt for password hashing and JWT for authentication.
+* **Course Catalog:** Displays a list of courses with details like title, instructor, price, rating, and difficulty level.  Includes search and filtering capabilities.
+* **Course Details:** Provides detailed information about individual courses, including a description, modules, and video lectures.
+* **Responsive Design:** Adapts to different screen sizes for optimal user experience.
+* **Admin Panel (Assumed):**  While not explicitly shown, the codebase suggests the potential for an admin panel to manage courses and users.
 
 ## Technology Stack
 
-* **Frontend:** React, React Router DOM, Tailwind CSS, Lucide-React (icons), Framer Motion (animations), React Player (video playback), Swiper (carousel).
-* **Build Tool:** Vite
-* **Styling:** Tailwind CSS with custom theme
-* **State Management:** React's useState hook
-* **Testing:**  (Not included in provided codebase - recommended addition)
+**Frontend:**
+
+* React 18.3.1
+* React Router DOM 7.0.2
+* Tailwind CSS 3.4.15
+* Lucide React (for icons)
+* Framer Motion (for animations)
+* React Player (for video playback)
+* Swiper (for carousel)
+
+**Backend:**
+
+* Node.js
+* Express.js 5.1.0
+* MongoDB (via Mongoose 8.15.1)
+* bcrypt 6.0.0 (for password hashing)
+* jsonwebtoken 9.0.2 (for JWT authentication)
+* express-validator 7.2.1 (for input validation)
+* cookie-parser 1.4.7 (for managing cookies)
+* cors 2.8.5 (for handling CORS)
+* dotenv 16.5.0 (for environment variables)
+* EJS (for templating - likely unused based on provided code)
+
+**Development Tools:**
+
+* Vite 5.4.10
+* ESLint 9.13.0 with plugins for React, React Hooks, and React Refresh
+* PostCSS 8.4.49 with Tailwind CSS and Autoprefixer
 
 ## System Workflow
 
-The Learnovate application follows a client-side rendering workflow. The main entry point is `src/main.jsx`, which renders the `src/App.jsx` component.  `App.jsx` uses React Router to manage navigation between different routes:
+The application follows a client-server architecture.
 
-1. **Routing (`src/App.jsx`):**  The application uses `react-router-dom` to define routes for different pages: `/` (Home), `/courses` (Course Listing), `/instructors` (Instructors), `/about` (About), and `/course/:id` (Course Details).
+**1. Frontend (Learnovate-app):**
 
-2. **Home Page (`src/Components/home.jsx`):** Displays introductory content and links to other sections of the application.
+* The main entry point is `src/main.jsx`, which renders the `src/App.jsx` component.
+* `src/App.jsx` uses React Router to manage navigation between different components (Home, Courses, Instructors, About, Login, Signup, CourseDetails).
+* Components like `src/Components/courses.jsx` fetch and display course data (currently hardcoded, but presumably would fetch from the backend in a production environment).
+* `src/Components/header.jsx` handles user authentication.  It verifies the user's authentication status by making a GET request to `/user/verify` on the backend.  Upon successful verification, it displays the username and a logout button.  If not logged in, it displays login and signup links.
+* `src/Components/login.jsx` and `src/Components/signup.jsx` handle user login and registration, respectively, by sending POST requests to the backend's `/user/login` and `/user/register` endpoints.
 
-3. **Course Listing (`src/Components/courses.jsx`):**  Displays a list of courses.  It uses `useState` to manage search and filter criteria.  The `courses` array (hardcoded in this example) is filtered based on user input. Clicking a course navigates to the course details page.
+**2. Backend (backend):**
 
-   ```javascript
-   // src/Components/courses.jsx (excerpt)
-   const filteredCourses = courses.filter((course) => 
-       course.title.toLowerCase().includes(search.toLowerCase()) &&
-       (filter === 'All' || course.category === filter)
-   );
-   ```
+* The main entry point is `backend/app.js`.  It initializes Express, connects to the MongoDB database using `backend/config/db.js`, and sets up middleware for JSON parsing, URL encoding, and CORS.
+* `backend/routes/user.routes.js` defines the API endpoints for user authentication:
+    * `/user/register`: Registers a new user.  Uses express-validator for input validation and bcrypt for password hashing.
+    * `/user/login`: Logs in an existing user.  Uses express-validator for validation, bcrypt for password comparison, and jsonwebtoken to generate a JWT.  Sets a cookie containing the JWT.
+    * `/user/verify`: Verifies the user's authentication status by checking the JWT in the cookie.
+    * `/user/logout`: Clears the authentication cookie, logging the user out.
+* The `backend/models/user.model.js` file defines the Mongoose schema for the user collection in MongoDB.
 
-4. **Course Details (`src/Components/courseDetails.jsx`):** Displays detailed information for a specific course. It uses `useParams` to get the course ID from the URL.  It then finds the corresponding course in the `courses` array.  The `ReactPlayer` component renders the video for the currently selected module.  Module selection is handled by `handleVideoSelect`, which checks if the module is free or if the user is enrolled before displaying it.
+**Data Flow:**
 
-   ```javascript
-   // src/Components/courseDetails.jsx (excerpt)
-   const handleVideoSelect = (module) => {
-       if (module.free || isEnrolled) {
-           setCurrentVideo(module);
-       } else {
-           alert("Enroll in the course to access this module!");
-       }
-   };
-   ```
+1. User interacts with the frontend.
+2. Frontend makes requests (GET for course data, POST for login/registration) to the backend.
+3. Backend validates input, interacts with the database (MongoDB), and returns JSON responses.
+4. Frontend updates the UI based on the backend's responses.
 
-5. **Instructor Profiles (`src/Components/instructor.jsx`):** Displays a list of instructor profiles with images and biographies.
+**Diagram (Textual):**
 
-6. **About Page (`src/Components/about.jsx`):** Contains information about Learnovate, its mission, vision, and testimonials using a Swiper carousel.
-
-7. **Header and Footer (`src/Components/header.jsx`, `src/Components/footer.jsx`):** These components provide navigation and contact information, respectively.  The header includes a responsive menu.
-
-**Data Flow:** The application's data is currently hardcoded within the component files (`courses` array in `src/Components/courses.jsx` and `src/Components/courseDetails.jsx`, `instructors` array in `src/Components/instructor.jsx`).  For a production-ready application, this data should be fetched from a backend API.
+```
+[User] --> [Frontend (React)] --> [Backend (Node.js, Express.js)] --> [MongoDB]
+                                      ^                                         |
+                                      |                                         |
+                                      +------------------------------------------+
+```
 
 ## Installation
 
+**Backend:**
+
 1. Clone the repository: `git clone <repository_url>`
-2. Navigate to the project directory: `cd Learnovate-app`
-3. Install dependencies: `npm install` or `yarn install`
+2. Navigate to the backend directory: `cd Learnovate - web/backend`
+3. Install dependencies: `npm install`
+4. Create a `.env` file in the backend directory and set the `MONGO_URI` and `JWT_SECRET` environment variables:
+
+```
+MONGO_URI=<your_mongodb_connection_string>
+JWT_SECRET=<your_jwt_secret_key>
+PORT=5000  //Optional, defaults to 5000
+```
+
+5. Start the server: `npm start`
+
+**Frontend:**
+
+1. Navigate to the frontend directory: `cd Learnovate - web/Learnovate-app`
+2. Install dependencies: `npm install`
+3. Start the development server: `npm run dev`
 
 ## Usage
 
-1. Start the development server: `npm run dev` or `yarn dev`
-2. Open your browser and go to `http://localhost:5173/`.
+The frontend should be accessible at `http://localhost:5173` (or the port specified by Vite).  The backend runs on `http://localhost:5000` (or the port specified in your `.env` file).  Ensure both are running before using the application.
 
 ## Project Structure
 
 ```
-Learnovate-app/
-├── public/
-│   └── vite.svg
-└── src/
-    ├── App.jsx
-    ├── Components/
-    │   ├── about.jsx
-    │   ├── courseDetails.jsx
-    │   ├── courses.jsx
-    │   ├── footer.jsx
-    │   ├── header.jsx
-    │   └── home.jsx
-    ├── assets/
-    │   ├── download.jpg
-    │   ├── ml-1.jpg
-    │   ├── pfp-1.jpg
-    │   ├── pfp-2.jpg
-    │   ├── pfp-3.jpg
-    │   ├── pfp-4.jpg
-    │   └── sample.png
-    ├── index.css
-    └── main.jsx
-package.json
-vite.config.js
-tailwind.config.js
-postcss.config.js
-eslint.config.js
-
+Learnovate - web/
+├── backend/             // Backend code
+│   ├── app.js           // Main backend file
+│   ├── routes/          // API routes
+│   │   └── user.routes.js // User authentication routes
+│   ├── models/          // Mongoose models
+│   │   └── user.model.js // User schema
+│   ├── config/          // Database configuration
+│   │   └── db.js       // Database connection
+│   └── package.json     // Backend dependencies
+├── Learnovate-app/      // Frontend code (React app)
+│   ├── src/             // Source code
+│   │   ├── App.jsx      // Main React app component
+│   │   ├── Components/  // React components
+│   │   │   ├── ...      // Various components (header, courses, etc.)
+│   │   └── ...          // Other frontend files
+│   ├── public/          // Static assets
+│   ├── vite.config.js   // Vite configuration
+│   ├── tailwind.config.js // Tailwind CSS configuration
+│   ├── postcss.config.js // PostCSS configuration
+│   └── package.json     // Frontend dependencies
+└── ...
 ```
 
 ## API Documentation
 
-There are no REST endpoints or APIs in this codebase. The data is currently hardcoded.  A backend API would be needed for a production-ready application.
+**Endpoints:**
+
+* `/user/register` (POST): User registration.  Requires `email`, `username`, and `password` in the request body.
+* `/user/login` (POST): User login. Requires `username` and `password` in the request body. Returns a JWT in a cookie upon successful login.
+* `/user/verify` (GET):  Authentication verification.  Checks for a valid JWT in the cookie.
+* `/user/logout` (POST): User logout. Clears the authentication cookie.
 
 ## Configuration
 
-* **Tailwind CSS Configuration:** The styling is configured in `tailwind.config.js`, including custom colors and animations.
-* **Environment Variables:**  None are used in the provided code.  Environment variables would be beneficial for managing API keys and other sensitive information in a production environment.
+* **Backend:**  The backend requires a `.env` file with `MONGO_URI` (MongoDB connection string) and `JWT_SECRET` (JWT secret key).  The `PORT` environment variable can optionally be set to change the port the backend server listens on.
+* **Frontend:** No explicit configuration is present in the provided code snippet, but environment variables could be used to configure API endpoints or other settings.
 
-## Further Development
+## Contributing
 
-This project is a basic front-end implementation.  To make it a fully functional online learning platform, the following improvements are recommended:
-
-* **Backend Integration:** Implement a backend API to manage courses, users, and enrollments.
-* **Database:** Integrate a database (e.g., PostgreSQL, MongoDB) to store course and user data.
-* **User Authentication:** Add user authentication and authorization.
-* **Payment Gateway Integration:** Integrate a payment gateway for handling course purchases.
-* **Testing:** Implement comprehensive unit and integration tests.
-* **Deployment:** Deploy the application to a hosting platform (e.g., Netlify, Vercel).
+Contributions are welcome! Please open an issue or submit a pull request.  Ensure you follow the project's coding style and run the linter before submitting any changes.

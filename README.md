@@ -1,5 +1,5 @@
 <!-- Auto-generated README using AI RAG -->
-<!-- Generated on: 2025-08-05T10:01:52.714Z -->
+<!-- Generated on: 2025-07-29T17:52:36.467Z -->
 
 # Learnovate: An Online Learning Platform
 
@@ -149,9 +149,16 @@ Learnovate - web/
 
 ## Configuration
 
-* **Backend:**  The backend requires a `.env` file with `MONGO_URI` (MongoDB connection string) and `JWT_SECRET` (JWT secret key).  The `PORT` environment variable can optionally be set to change the port the backend server listens on.
-* **Frontend:** No explicit configuration is present in the provided code snippet, but environment variables could be used to configure API endpoints or other settings.
+* **Tailwind CSS Configuration:** The styling is configured in `tailwind.config.js`, including custom colors and animations.
+* **Environment Variables:**  None are used in the provided code.  Environment variables would be beneficial for managing API keys and other sensitive information in a production environment.
 
-## Contributing
+## Further Development
 
-Contributions are welcome! Please open an issue or submit a pull request.  Ensure you follow the project's coding style and run the linter before submitting any changes.
+This project is a basic front-end implementation.  To make it a fully functional online learning platform, the following improvements are recommended:
+
+* **Backend Integration:** Implement a backend API to manage courses, users, and enrollments.
+* **Database:** Integrate a database (e.g., PostgreSQL, MongoDB) to store course and user data.
+* **User Authentication:** Add user authentication and authorization.
+* **Payment Gateway Integration:** Integrate a payment gateway for handling course purchases.
+* **Testing:** Implement comprehensive unit and integration tests.
+* **Deployment:** Deploy the application to a hosting platform (e.g., Netlify, Vercel).

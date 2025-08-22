@@ -140,7 +140,7 @@ function Header() {
             <div className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-4 p-4 md:p-0">
               {/* Clickable Profile Link */}
               <Link
-                to="/profile"
+                to="/profilepage"
                 className="flex items-center space-x-2 hover:bg-white hover:bg-opacity-10 rounded-lg px-3 py-2 transition-all duration-200 group"
                 onClick={() => setIsMenuOpen(false)}
               >

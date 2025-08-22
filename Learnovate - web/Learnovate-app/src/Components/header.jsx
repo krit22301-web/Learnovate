@@ -71,8 +71,6 @@ function Header() {
     } catch (error) {
       console.error('Logout error details:', error);
       alert(`Logout error: ${error.message}`);
-      
-      // Fallback: Clear local state even if server request fails
       setUsername(null);
       localStorage.removeItem('username');
       setIsMenuOpen(false);

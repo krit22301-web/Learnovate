@@ -4,6 +4,16 @@ import { Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import img from '../assets/sample.png'
 import img2 from '../assets/ml-1.jpg'
+import img3 from '../assets/bootcamp.png'
+import img4 from '../assets/python.png'
+import img5 from '../assets/marketing.png'
+import img6 from '../assets/artinte.png'
+import img7 from '../assets/graphic.png'
+import img8 from '../assets/datasc.png'
+import img9 from '../assets/fin.png'
+import img10 from '../assets/cyber.png'
+import img11 from '../assets/creative.png'
+import img12 from '../assets/java.png'
 
 
 const courses = [
@@ -30,7 +40,127 @@ const courses = [
     lectures: 32,
     category: "Advanced",
     cover: img2,
+  }, {
+    id: 3,
+    title: "The Complete Web Development Bootcamp",
+    instructor: "Angela Yu",
+    price: 129.99,
+    free: false,
+    difficulty: "Intermediate",
+    rating: 4.8,
+    lectures: 55,
+    category: "Intermediate",
+    cover: img3
+  },
+  {
+    id: 4,
+    title: "Python for Everybody",
+    instructor: "Dr. Charles Severance",
+    price: 0.00,
+    free: true,
+    difficulty: "Beginner",
+    rating: 4.9,
+    lectures: 40,
+    category: "Beginner",
+    cover: img4
+  },
+  {
+    id: 5,
+    title: "Digital Marketing Masterclass",
+    instructor: "Eva Fox",
+    price: 79.99,
+    free: false,
+    difficulty: "Intermediate",
+    rating: 4.5,
+    lectures: 30,
+    category: "Intermediate",
+    cover: img5
+  },
+  {
+    id: 6,
+    title: "Introduction to Artificial Intelligence",
+    instructor: "Prof. Andrew Ng",
+    price: 199.99,
+    free: false,
+    difficulty: "Advanced",
+    rating: 4.6,
+    lectures: 48,
+    category: "Advanced",
+    cover: img6
+  },
+  {
+    id: 7,
+    title: "Graphic Design Basics",
+    instructor: "John Doe",
+    price: 29.99,
+    free: false,
+    difficulty: "Beginner",
+    rating: 4.4,
+    lectures: 20,
+    category: "Beginner",
+    cover: img7
+  },
+  {
+    id: 8,
+    title: "Data Science with R",
+    instructor: "Dr. Maria Garcia",
+    price: 89.99,
+    free: false,
+    difficulty: "Intermediate",
+    rating: 4.7,
+    lectures: 35,
+    category: "Intermediate",
+    cover: img8
+  },
+  {
+    id: 9,
+    title: "Financial Markets Explained",
+    instructor: "Michael Rodriguez",
+    price: 59.99,
+    free: false,
+    difficulty: "Beginner",
+    rating: 4.2,
+    lectures: 28,
+    category: "Beginner",
+    cover: img9
+  },
+  {
+    id: 10,
+    title: "Cybersecurity Fundamentals",
+    instructor: "Ben Carter",
+    price: 149.99,
+    free: false,
+    difficulty: "Advanced",
+    rating: 4.8,
+    lectures: 42,
+    category: "Advanced",
+    cover: img10
+  },
+  {
+    id: 11,
+    title: "Creative Writing Workshop",
+    instructor: "Olivia White",
+    price: 0.00,
+    free: true,
+    difficulty: "Beginner",
+    rating: 4.6,
+    lectures: 18,
+    category: "Beginner",
+    cover: img11
+  },
+  {
+    id: 12,
+    title: "The Complete JavaScript Course",
+    instructor: "Dr. Emily Carter",
+    price: 119.99,
+    free: false,
+    difficulty: "Intermediate",
+    rating: 4.9,
+    lectures: 60,
+    category: "Intermediate",
+    cover: img12
   }
+  //change here
 ];
 
 function Courses() {
@@ -64,6 +194,7 @@ function Courses() {
         >
           <option value="All">All Levels</option>
           <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
           <option value="Advanced">Advanced</option>
         </select>
       </div>

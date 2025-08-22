@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Star, Play, Lock } from 'lucide-react';
+import { Star, Play, Lock, CheckCircle, Trophy } from 'lucide-react';
 import ReactPlayer from 'react-player';
 import img from '../assets/sample.png';
 
@@ -9,8 +8,8 @@ const courses = [
     id: 1,
     title: "Introduction to Data-Structures",
     instructor: "Dr. Smriti",
-    price: 49.99,
-    free: false,
+    price: 0, // Changed to 0 for free
+    free: true, // Now all courses are free
     difficulty: "Beginner",
     rating: 4.7,
     lectures: 24,
@@ -22,116 +21,418 @@ const courses = [
         id: 1,
         title: "What is a Data Structure?",
         duration: "45:23",
-        videoUrl: "https://example.com/video1",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         free: true
       },
       {
         id: 2,
         title: "Understanding Arrays",
         duration: "52:14",
-        videoUrl: "https://example.com/video2",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
         free: false
       },
       {
         id: 3,
         title: "Exploring Linked Lists",
         duration: "1:12:45",
-        videoUrl: "https://example.com/video3",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
         free: false
       },
       {
         id: 4,
         title: "What is a Stack?",
         duration: "58:30",
-        videoUrl: "https://example.com/video4",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
         free: false
       },
       {
         id: 5,
         title: "Queues",
         duration: "47:22",
-        videoUrl: "https://example.com/video5",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
         free: false
       },
       {
         id: 6,
-        title: "Big-O Notation: ",
+        title: "Big-O Notation",
         duration: "1:05:10",
-        videoUrl: "https://example.com/video6",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
         free: false
       }
     ]
   }
 ];
 
-function CourseDetails() {
-  const { id } = useParams();
+function CourseDetails({ courseId = 1 }) { // Added default courseId prop
   const [course, setCourse] = useState(null);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [isEnrolling, setIsEnrolling] = useState(false);
+  const [enrollmentMessage, setEnrollmentMessage] = useState('');
+  const [watchProgress, setWatchProgress] = useState({});
+  const [currentProgress, setCurrentProgress] = useState(0);
+  const [completedModules, setCompletedModules] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const foundCourse = courses.find((c) => c.id === parseInt(id));
+    const foundCourse = courses.find((c) => c.id === parseInt(courseId));
     if (foundCourse) {
       setCourse(foundCourse);
       setCurrentVideo(foundCourse.modules[0]);
+      checkEnrollmentStatus(foundCourse.id);
     }
-  } , [id]);
+    setIsLoading(false);
+  }, [courseId]);
+
+  const checkEnrollmentStatus = async (courseId) => {
+    try {
+      const response = await fetch(`https://backend-test-k5py.onrender.com/user/course-status/${courseId}`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setIsEnrolled(data.enrolled);
+        setCurrentProgress(data.progress || 0);
+        setCompletedModules(data.completedModules || 0);
+        
+        // Set watch progress for each module based on completed modules
+        const progress = {};
+        course?.modules.forEach((module, index) => {
+          progress[module.id] = index < data.completedModules;
+        });
+        setWatchProgress(progress);
+      } else if (response.status === 401) {
+        // User not logged in, that's okay
+        setIsEnrolled(false);
+      }
+    } catch (error) {
+      console.error('Error checking enrollment:', error);
+    }
+  };
+
+  const handleEnrollment = async () => {
+    if (!course) return;
+    
+    setIsEnrolling(true);
+    setEnrollmentMessage('');
+    
+    try {
+      const response = await fetch('https://backend-test-k5py.onrender.com/user/enroll-course', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          courseId: course.id.toString(),
+          title: course.title,
+          instructor: course.instructor,
+          rating: course.rating,
+          totalModules: course.modules.length
+        })
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok) {
+        setIsEnrolled(true);
+        setEnrollmentMessage('🎉 Successfully enrolled! Welcome to the course!');
+        
+        // Refresh enrollment status to get updated data
+        setTimeout(() => {
+          checkEnrollmentStatus(course.id);
+          setEnrollmentMessage('');
+        }, 2000);
+        
+      } else if (response.status === 401) {
+        setEnrollmentMessage('Please log in to enroll in courses');
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 2000);
+      } else if (response.status === 400 && responseData.error.includes('Already enrolled')) {
+        setEnrollmentMessage('You are already enrolled in this course!');
+        setIsEnrolled(true);
+        checkEnrollmentStatus(course.id);
+      } else {
+        setEnrollmentMessage(responseData.error || 'Enrollment failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Enrollment error:', error);
+      setEnrollmentMessage('Network error. Please check your connection.');
+    } finally {
+      setIsEnrolling(false);
+      setTimeout(() => setEnrollmentMessage(''), 5000);
+    }
+  };
+
+  const handleVideoProgress = async (moduleId, progress) => {
+    if (!isEnrolled || !course) return;
+    
+    const isCompleted = progress > 0.8; // Mark as watched if 80% completed
+    
+    // Update local progress
+    setWatchProgress(prev => {
+      const newProgress = {
+        ...prev,
+        [moduleId]: isCompleted
+      };
+      
+      // Calculate completed modules
+      const completedCount = Object.values(newProgress).filter(Boolean).length;
+      setCompletedModules(completedCount);
+      
+      // Calculate overall course progress
+      const newProgressPercentage = Math.round((completedCount / course.modules.length) * 100);
+      
+      // Update progress in database if there's a change
+      if (newProgressPercentage !== currentProgress || isCompleted !== prev[moduleId]) {
+        setCurrentProgress(newProgressPercentage);
+        updateProgressInDatabase(course.id.toString(), newProgressPercentage, completedCount);
+      }
+      
+      return newProgress;
+    });
+  };
+
+  const updateProgressInDatabase = async (courseId, progressPercentage, completedCount) => {
+    try {
+      await fetch('https://backend-test-k5py.onrender.com/user/update-progress', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          courseId,
+          progress: progressPercentage,
+          hoursSpent: 0.5, // You can calculate actual hours based on video duration
+          completedModules: completedCount
+        })
+      });
+    } catch (error) {
+      console.error('Error updating progress:', error);
+    }
+  };
 
   const handleVideoSelect = (module) => {
     if (module.free || isEnrolled) {
       setCurrentVideo(module);
     } else {
-      alert("Enroll in the course to access this module!");
+      setEnrollmentMessage("Enroll in the course to access this module!");
+      setTimeout(() => setEnrollmentMessage(''), 3000);
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-4 text-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading course...</p>
+      </div>
+    );
+  }
+
   if (!course) {
-    return <div className="container mx-auto p-4">No Lectures Yet!</div>;
+    return (
+      <div className="container mx-auto p-4 text-center">
+        <h2 className="text-2xl font-bold text-gray-600">Course not found!</h2>
+        <p className="text-gray-500 mt-2">The course you're looking for doesn't exist.</p>
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 p-4 md:p-8">
-      <h2 className="text-2xl font-bold mb-4">{course.title}</h2>
-      <div className="bg-black rounded-xl overflow-hidden shadow-lg mb-6">
-        {currentVideo && (
-          <ReactPlayer 
-          url={currentVideo.videoUrl} 
-          width="100%"
-          height="auto"
-          controls
-          playing
-        />
+      {/* Course Header */}
+      <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex-1">
+            <h2 className="text-3xl font-bold mb-2">{course.title}</h2>
+            <p className="text-gray-600 mb-4">Instructor: {course.instructor}</p>
+          </div>
+          <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold">
+            FREE COURSE
+          </div>
+        </div>
+        
+        {/* Course Stats */}
+        <div className="flex items-center text-gray-500 space-x-6 mb-4">
+          <span className="flex items-center">
+            <Star size={16} className="mr-1 text-yellow-500 fill-current" />
+            {course.rating}
+          </span>
+          <span>Level: {course.difficulty}</span>
+          <span>Lectures: {course.lectures}</span>
+          <span>Duration: ~12 hours</span>
+        </div>
+
+        {/* Enrollment Status */}
+        {isEnrolled && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+            <div className="flex items-center space-x-2 mb-3">
+              <CheckCircle size={20} className="text-green-600" />
+              <span className="text-green-600 font-medium">Enrolled Successfully!</span>
+              {currentProgress >= 100 && (
+                <Trophy size={20} className="text-yellow-600 ml-2" />
+              )}
+            </div>
+            <div className="grid grid-cols-3 gap-4 text-sm">
+              <div>
+                <span className="text-gray-600">Progress: </span>
+                <span className="font-semibold text-green-600">{currentProgress}%</span>
+              </div>
+              <div>
+                <span className="text-gray-600">Completed: </span>
+                <span className="font-semibold text-green-600">{completedModules}/{course.modules.length} modules</span>
+              </div>
+              <div>
+                <span className="text-gray-600">Status: </span>
+                <span className={`font-semibold ${currentProgress >= 100 ? 'text-yellow-600' : 'text-blue-600'}`}>
+                  {currentProgress >= 100 ? 'Completed!' : 'In Progress'}
+                </span>
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    currentProgress >= 100 ? 'bg-yellow-500' : 'bg-green-500'
+                  }`}
+                  style={{ width: `${currentProgress}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <p className="text-gray-700 mb-4">{course.description}</p>
+
+        {/* Enrollment Messages */}
+        {enrollmentMessage && (
+          <div className={`p-3 rounded-lg mb-4 text-center font-medium ${
+            enrollmentMessage.includes('Successfully') || enrollmentMessage.includes('🎉') ? 'bg-green-100 text-green-800' :
+            enrollmentMessage.includes('log in') ? 'bg-yellow-100 text-yellow-800' :
+            enrollmentMessage.includes('already enrolled') ? 'bg-blue-100 text-blue-800' :
+            'bg-red-100 text-red-800'
+          }`}>
+            {enrollmentMessage}
+          </div>
         )}
       </div>
-      <p className="text-gray-600 mb-4">{course.description}</p>
-      <div className="flex items-center text-gray-500 space-x-4 mb-6">
-        <span>Level: {course.difficulty}</span>
-        <span>Lectures: {course.lectures}</span>
-        <span><Star size={14} className="inline mr-1" />{course.rating}</span>
-      </div>
-      <h3 className="font-semibold mb-2">Course Content</h3>
-      {course.modules.map((module) => (
-        <div
-          key={module.id}
-          className="flex justify-between items-center p-3 mb-2 rounded-lg cursor-pointer"
-          onClick={() => handleVideoSelect(module)}
-        >
-          <div className="flex items-center">
-            {module.free || isEnrolled ? <Play size={16} className="mr-2 text-purple-600" /> : <Lock size={16} className="mr-2 text-gray-400" />}
-            <span>{module.title}</span>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Video Player */}
+        <div className="lg:col-span-2">
+          <div className="bg-black rounded-xl overflow-hidden shadow-lg mb-4">
+            {currentVideo && (
+              <ReactPlayer 
+                url={currentVideo.videoUrl} 
+                width="100%"
+                height="400px"
+                controls
+                onProgress={({ played }) => handleVideoProgress(currentVideo.id, played)}
+                config={{
+                  youtube: {
+                    playerVars: { showinfo: 1 }
+                  }
+                }}
+              />
+            )}
           </div>
-          <span className="text-xs text-gray-500">{module.duration}</span>
+          
+          {currentVideo && (
+            <div className="bg-white rounded-lg shadow p-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-xl font-bold">{currentVideo.title}</h3>
+                  <p className="text-gray-600">Duration: {currentVideo.duration}</p>
+                </div>
+                {watchProgress[currentVideo.id] && (
+                  <CheckCircle size={24} className="text-green-500" />
+                )}
+              </div>
+            </div>
+          )}
         </div>
-      ))}
-      {!isEnrolled && (
-        <button
-          onClick={() => setIsEnrolled(true)}
-          className="w-full mt-4 bg-blue-700 text-white py-2 rounded-lg hover:bg-cyan-300"
-        >
-          Enroll Now
-        </button>
-      )}
+
+        {/* Course Modules & Enrollment */}
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h3 className="text-xl font-bold mb-4">Course Content</h3>
+            
+            <div className="space-y-2 mb-6">
+              {course.modules.map((module, index) => (
+                <div
+                  key={module.id}
+                  className={`flex justify-between items-center p-3 rounded-lg cursor-pointer transition-colors ${
+                    currentVideo?.id === module.id ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'
+                  }`}
+                  onClick={() => handleVideoSelect(module)}
+                >
+                  <div className="flex items-center flex-1">
+                    {module.free || isEnrolled ? (
+                      watchProgress[module.id] ? (
+                        <CheckCircle size={16} className="mr-2 text-green-600" />
+                      ) : (
+                        <Play size={16} className="mr-2 text-blue-600" />
+                      )
+                    ) : (
+                      <Lock size={16} className="mr-2 text-gray-400" />
+                    )}
+                    <div className="flex-1">
+                      <p className={`text-sm font-medium ${
+                        module.free || isEnrolled ? 'text-gray-900' : 'text-gray-500'
+                      }`}>
+                        {index + 1}. {module.title}
+                      </p>
+                      <p className="text-xs text-gray-500">{module.duration}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {!isEnrolled ? (
+              <button
+                onClick={handleEnrollment}
+                disabled={isEnrolling}
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+              >
+                {isEnrolling ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <span>Enrolling...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle size={20} />
+                    <span>Enroll Now - FREE!</span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="text-center">
+                  <CheckCircle size={32} className="text-green-600 mx-auto mb-2" />
+                  <p className="font-medium text-green-800 mb-2">You're Enrolled!</p>
+                  <p className="text-sm text-gray-600 mb-3">
+                    Continue learning to complete the course
+                  </p>
+                  {currentProgress >= 100 && (
+                    <div className="bg-yellow-100 border border-yellow-300 rounded p-2">
+                      <Trophy size={20} className="text-yellow-600 mx-auto mb-1" />
+                      <p className="text-sm font-bold text-yellow-800">Congratulations!</p>
+                      <p className="text-xs text-yellow-700">You've completed this course!</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

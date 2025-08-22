@@ -9,6 +9,7 @@ import About from './Components/about';
 import CourseDetails from './Components/courseDetails';
 import Login from './Components/login';
 import Signup from './Components/signup';
+import ProfilePage from './Components/profilepage';
 
 function Layout({ children }) {
   const location = useLocation();
@@ -35,6 +36,7 @@ function App() {
           <Route path="/course/:id" element={<CourseDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/profilepage" element={<ProfilePage />} />
         </Routes>
       </Layout>
     </Router>

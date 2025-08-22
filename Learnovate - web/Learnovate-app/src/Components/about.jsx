@@ -86,7 +86,7 @@ function About() {
             loop={true}
           >
             <SwiperSlide>
-              <div className="bg-cyan-900 p-4 sm:p-6 flex flex-col justify-center items-center text-center">
+              <div className="bg-cyan-900 p-4 sm:p-6 flex flex-col justify-center items-center text-center rounded-xl">
                 <img src={p1} className="w-32 h-32 rounded-full object-cover" />
                 <h3 className="text-xl sm:text-2xl font-semibold mb-2">Om Swami</h3>
                 <p className="text-sm sm:text-base">
@@ -95,7 +95,7 @@ function About() {
               </div>
             </SwiperSlide>
             <SwiperSlide>
-              <div className="bg-cyan-900 p-4 sm:p-6 flex flex-col justify-center items-center text-center">
+              <div className="bg-cyan-900 p-4 sm:p-6 flex flex-col justify-center items-center text-center rounded-xl">
                 <img src={p2} className="w-32 h-32 rounded-full object-cover" />
                 <h3 className="text-xl sm:text-2xl font-semibold mb-2">Shubhi Bhanagar</h3>
                 <p className="text-sm sm:text-base">
@@ -104,7 +104,7 @@ function About() {
               </div>
             </SwiperSlide>
             <SwiperSlide>
-              <div className="bg-cyan-900 p-4 sm:p-6 flex flex-col justify-center items-center text-center">
+              <div className="bg-cyan-900 p-4 sm:p-6 flex flex-col justify-center items-center text-center rounded-xl">
                 <img src={p3} className="w-32 h-32 rounded-full object-cover" />
                 <h3 className="text-xl sm:text-2xl font-semibold mb-2">Aditya Mishra</h3>
                 <p className="text-sm sm:text-base">
@@ -113,7 +113,7 @@ function About() {
               </div>
             </SwiperSlide>
             <SwiperSlide>
-              <div className="bg-cyan-900 p-4 sm:p-6 flex flex-col justify-center items-center text-center">
+              <div className="bg-cyan-900 p-4 sm:p-6 flex flex-col justify-center items-center text-center rounded-xl">
                 <img src={p4} className="w-32 h-32 rounded-full object-cover" />
                 <h3 className="text-xl sm:text-2xl font-semibold mb-2">Kartik Tyagi</h3>
                 <p className="text-sm sm:text-base">

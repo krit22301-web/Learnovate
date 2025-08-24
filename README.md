@@ -1,6 +1,3 @@
-<!-- Auto-generated README using AI RAG -->
-<!-- Generated on: 2025-08-24T21:20:04.848Z -->
-
 # Learnovate - Web Application
 
 ## Description

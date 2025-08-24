@@ -1,69 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Star, Play, Lock, CheckCircle, Trophy } from 'lucide-react';
 import ReactPlayer from 'react-player';
-import img from '../assets/sample.png';
+import { useParams } from 'react-router-dom';
+import { courses } from '../data/coursedata'; // Import from your data file
 
-const courses = [
-  {
-    id: 1,
-    title: "Introduction to Data-Structures",
-    instructor: "Dr. Smriti",
-    price: 0, // Changed to 0 for free
-    free: true, // Now all courses are free
-    difficulty: "Beginner",
-    rating: 4.7,
-    lectures: 24,
-    category: "Beginner",
-    cover: img,
-    description: "Learn the basics of Data Structures and Algorithms (DSA) to efficiently organize and process data. Explore arrays, linked lists, stacks, queues, and key algorithms like searching and sorting. Improve problem-solving skills and code efficiency.",
-    modules: [
-      {
-        id: 1,
-        title: "What is a Data Structure?",
-        duration: "45:23",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        free: true
-      },
-      {
-        id: 2,
-        title: "Understanding Arrays",
-        duration: "52:14",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-        free: false
-      },
-      {
-        id: 3,
-        title: "Exploring Linked Lists",
-        duration: "1:12:45",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        free: false
-      },
-      {
-        id: 4,
-        title: "What is a Stack?",
-        duration: "58:30",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-        free: false
-      },
-      {
-        id: 5,
-        title: "Queues",
-        duration: "47:22",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-        free: false
-      },
-      {
-        id: 6,
-        title: "Big-O Notation",
-        duration: "1:05:10",
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        free: false
-      }
-    ]
-  }
-];
-
-function CourseDetails({ courseId = 1 }) { // Added default courseId prop
+function CourseDetails() {
+  const { id: courseId } = useParams(); // Get 'id' from URL and rename it to 'courseId' 
   const [course, setCourse] = useState(null);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
@@ -75,11 +17,22 @@ function CourseDetails({ courseId = 1 }) { // Added default courseId prop
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    console.log('=== DEBUG INFO ===');
+    console.log('courseId from URL:', courseId);
+    console.log('courseId type:', typeof courseId);
+    
     const foundCourse = courses.find((c) => c.id === parseInt(courseId));
+    console.log('Found course:', foundCourse);
+    
     if (foundCourse) {
       setCourse(foundCourse);
-      setCurrentVideo(foundCourse.modules[0]);
+      // Set first module as current video if modules exist
+      if (foundCourse.modules && foundCourse.modules.length > 0) {
+        setCurrentVideo(foundCourse.modules[0]);
+      }
       checkEnrollmentStatus(foundCourse.id);
+    } else {
+      console.log('Course not found! Available IDs:', courses.map(c => c.id));
     }
     setIsLoading(false);
   }, [courseId]);
@@ -99,7 +52,7 @@ function CourseDetails({ courseId = 1 }) { // Added default courseId prop
         
         // Set watch progress for each module based on completed modules
         const progress = {};
-        course?.modules.forEach((module, index) => {
+        course?.modules?.forEach((module, index) => {
           progress[module.id] = index < data.completedModules;
         });
         setWatchProgress(progress);
@@ -130,7 +83,7 @@ function CourseDetails({ courseId = 1 }) { // Added default courseId prop
           title: course.title,
           instructor: course.instructor,
           rating: course.rating,
-          totalModules: course.modules.length
+          totalModules: course.modules?.length || 0
         })
       });
 
@@ -184,7 +137,7 @@ function CourseDetails({ courseId = 1 }) { // Added default courseId prop
       setCompletedModules(completedCount);
       
       // Calculate overall course progress
-      const newProgressPercentage = Math.round((completedCount / course.modules.length) * 100);
+      const newProgressPercentage = Math.round((completedCount / (course.modules?.length || 1)) * 100);
       
       // Update progress in database if there's a change
       if (newProgressPercentage !== currentProgress || isCompleted !== prev[moduleId]) {
@@ -252,8 +205,10 @@ function CourseDetails({ courseId = 1 }) { // Added default courseId prop
             <h2 className="text-3xl font-bold mb-2">{course.title}</h2>
             <p className="text-gray-600 mb-4">Instructor: {course.instructor}</p>
           </div>
-          <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold">
-            FREE COURSE
+          <div className={`px-4 py-2 rounded-full font-semibold ${
+            course.free ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+          }`}>
+            {course.free ? 'FREE COURSE' : `$${course.price}`}
           </div>
         </div>
         
@@ -285,7 +240,7 @@ function CourseDetails({ courseId = 1 }) { // Added default courseId prop
               </div>
               <div>
                 <span className="text-gray-600">Completed: </span>
-                <span className="font-semibold text-green-600">{completedModules}/{course.modules.length} modules</span>
+                <span className="font-semibold text-green-600">{completedModules}/{course.modules?.length || 0} modules</span>
               </div>
               <div>
                 <span className="text-gray-600">Status: </span>
@@ -307,7 +262,7 @@ function CourseDetails({ courseId = 1 }) { // Added default courseId prop
           </div>
         )}
 
-        <p className="text-gray-700 mb-4">{course.description}</p>
+        <p className="text-gray-700 mb-4">{course.description || 'Course description not available.'}</p>
 
         {/* Enrollment Messages */}
         {enrollmentMessage && (
@@ -325,34 +280,40 @@ function CourseDetails({ courseId = 1 }) { // Added default courseId prop
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Video Player */}
         <div className="lg:col-span-2">
-          <div className="bg-black rounded-xl overflow-hidden shadow-lg mb-4">
-            {currentVideo && (
-              <ReactPlayer 
-                url={currentVideo.videoUrl} 
-                width="100%"
-                height="400px"
-                controls
-                onProgress={({ played }) => handleVideoProgress(currentVideo.id, played)}
-                config={{
-                  youtube: {
-                    playerVars: { showinfo: 1 }
-                  }
-                }}
-              />
-            )}
-          </div>
-          
-          {currentVideo && (
-            <div className="bg-white rounded-lg shadow p-4">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-xl font-bold">{currentVideo.title}</h3>
-                  <p className="text-gray-600">Duration: {currentVideo.duration}</p>
-                </div>
-                {watchProgress[currentVideo.id] && (
-                  <CheckCircle size={24} className="text-green-500" />
-                )}
+          {/* Only show video player if course has modules and videos */}
+          {currentVideo && course.modules && course.modules.length > 0 ? (
+            <>
+              <div className="bg-black rounded-xl overflow-hidden shadow-lg mb-4">
+                <ReactPlayer 
+                  url={currentVideo.videoUrl} 
+                  width="100%"
+                  height="400px"
+                  controls
+                  onProgress={({ played }) => handleVideoProgress(currentVideo.id, played)}
+                  config={{
+                    youtube: {
+                      playerVars: { showinfo: 1 }
+                    }
+                  }}
+                />
               </div>
+              
+              <div className="bg-white rounded-lg shadow p-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-xl font-bold">{currentVideo.title}</h3>
+                    <p className="text-gray-600">Duration: {currentVideo.duration}</p>
+                  </div>
+                  {watchProgress[currentVideo.id] && (
+                    <CheckCircle size={24} className="text-green-500" />
+                  )}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="bg-white rounded-lg shadow p-8 text-center">
+              <h3 className="text-xl font-bold text-gray-600 mb-2">Course Content Coming Soon</h3>
+              <p className="text-gray-500">Video content for this course is currently being prepared.</p>
             </div>
           )}
         </div>
@@ -362,43 +323,53 @@ function CourseDetails({ courseId = 1 }) { // Added default courseId prop
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-xl font-bold mb-4">Course Content</h3>
             
-            <div className="space-y-2 mb-6">
-              {course.modules.map((module, index) => (
-                <div
-                  key={module.id}
-                  className={`flex justify-between items-center p-3 rounded-lg cursor-pointer transition-colors ${
-                    currentVideo?.id === module.id ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'
-                  }`}
-                  onClick={() => handleVideoSelect(module)}
-                >
-                  <div className="flex items-center flex-1">
-                    {module.free || isEnrolled ? (
-                      watchProgress[module.id] ? (
-                        <CheckCircle size={16} className="mr-2 text-green-600" />
+            {course.modules && course.modules.length > 0 ? (
+              <div className="space-y-2 mb-6">
+                {course.modules.map((module, index) => (
+                  <div
+                    key={module.id}
+                    className={`flex justify-between items-center p-3 rounded-lg cursor-pointer transition-colors ${
+                      currentVideo?.id === module.id ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'
+                    }`}
+                    onClick={() => handleVideoSelect(module)}
+                  >
+                    <div className="flex items-center flex-1">
+                      {module.free || isEnrolled ? (
+                        watchProgress[module.id] ? (
+                          <CheckCircle size={16} className="mr-2 text-green-600" />
+                        ) : (
+                          <Play size={16} className="mr-2 text-blue-600" />
+                        )
                       ) : (
-                        <Play size={16} className="mr-2 text-blue-600" />
-                      )
-                    ) : (
-                      <Lock size={16} className="mr-2 text-gray-400" />
-                    )}
-                    <div className="flex-1">
-                      <p className={`text-sm font-medium ${
-                        module.free || isEnrolled ? 'text-gray-900' : 'text-gray-500'
-                      }`}>
-                        {index + 1}. {module.title}
-                      </p>
-                      <p className="text-xs text-gray-500">{module.duration}</p>
+                        <Lock size={16} className="mr-2 text-gray-400" />
+                      )}
+                      <div className="flex-1">
+                        <p className={`text-sm font-medium ${
+                          module.free || isEnrolled ? 'text-gray-900' : 'text-gray-500'
+                        }`}>
+                          {index + 1}. {module.title}
+                        </p>
+                        <p className="text-xs text-gray-500">{module.duration}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                <p className="text-gray-600 text-center">Course modules will be available soon!</p>
+              </div>
+            )}
 
             {!isEnrolled ? (
               <button
                 onClick={handleEnrollment}
                 disabled={isEnrolling}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+                className={`w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 ${
+                  course.free 
+                    ? 'bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white'
+                    : 'bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white'
+                }`}
               >
                 {isEnrolling ? (
                   <>
@@ -408,7 +379,7 @@ function CourseDetails({ courseId = 1 }) { // Added default courseId prop
                 ) : (
                   <>
                     <CheckCircle size={20} />
-                    <span>Enroll Now - FREE!</span>
+                    <span>Enroll Now{course.free ? ' - FREE!' : ` - $${course.price}`}</span>
                   </>
                 )}
               </button>

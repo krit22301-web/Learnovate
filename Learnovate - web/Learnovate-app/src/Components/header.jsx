@@ -138,10 +138,21 @@ function Header() {
           ) : username ? (
             // Logged in state
             <div className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-4 p-4 md:p-0">
-              <div className="flex items-center space-x-2">
-                <User size={28} className="bg-gray-200 text-black rounded-full p-1" />
-                <span className="font-semibold">{username}</span>
-              </div>
+              {/* Clickable Profile Link */}
+              <Link
+                to="/profilepage"
+                className="flex items-center space-x-2 hover:bg-white hover:bg-opacity-10 rounded-lg px-3 py-2 transition-all duration-200 group"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <User 
+                  size={28} 
+                  className="bg-gray-200 text-black rounded-full p-1 group-hover:bg-gray-100 transition-colors" 
+                />
+                <span className="font-semibold group-hover:text-yellow-300 transition-colors">
+                  {username}
+                </span>
+              </Link>
+              
               <button
                 onClick={handleLogout}
                 className="inline-flex items-center px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
@@ -163,7 +174,6 @@ function Header() {
               <Link
                 to="/signup"
                 className="px-4 py-2 rounded-lg bg-black hover:bg-gray-900 text-white font-semibold shadow-md transition-all duration-200 block md:inline text-center"
-                onClick={() => setIsMenuOpen(false)}
               >
                 SignUp
               </Link>

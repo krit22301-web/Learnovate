@@ -10,24 +10,26 @@ import CourseDetails from './Components/courseDetails';
 import Login from './Components/login';
 import Signup from './Components/signup';
 import ProfilePage from './Components/profilepage';
-
-function Layout({ children }) {
-  const location = useLocation();
-  const hideLayout = location.pathname === '/login' || location.pathname === '/signup';
-
-  return (
-    <div className="flex flex-col min-h-screen">
-      {!hideLayout && <Header />}
-      <main className="flex-grow">{children}</main>
-      {!hideLayout && <Footer />}
-    </div>
-  );
-}
+import ScrollToTop from './Components/scrolltop';
 
 function App() {
   return (
     <Router>
-      <Layout>
+      <ScrollToTop />
+      <AppContent />
+    </Router>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+  const isAuthPage = ['/login', '/signup'].includes(location.pathname);
+  const isCourseDetails = location.pathname.startsWith('/course/');
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      {!isAuthPage && <Header />}
+      <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/instructors" element={<Instructors />} />
@@ -38,8 +40,9 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/profilepage" element={<ProfilePage />} />
         </Routes>
-      </Layout>
-    </Router>
+      </main>
+      {!isAuthPage && !isCourseDetails && <Footer />}
+    </div>
   );
 }
 

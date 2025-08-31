@@ -1,11 +1,26 @@
-import React from 'react';
-import { 
-  BookOpen, Users, Computer, ArrowRight, Play, Star, 
-  TrendingUp, Award, Clock, CheckCircle, Zap, Globe,
-  Code, Palette, BarChart3, Brain, Shield, PenTool
-} from 'lucide-react';
+import React, { useCallback } from 'react';
+import { BookOpen, Users, Computer, ArrowRight, Play, Star, Award, Zap, Code, Palette, BarChart3, Brain, Shield, PenTool } from 'lucide-react';
+import img from '../assets/code.jpeg'
 
 function Home() {
+  const paintReveal = useCallback((x, y, canvas = null) => {
+    const targetCanvas = canvas;
+    if (!targetCanvas) return;
+
+    const ctx = targetCanvas.getContext('2d');
+    ctx.globalCompositeOperation = 'destination-out';
+    const gradient = ctx.createRadialGradient(x, y, 0, x, y, 40);
+    gradient.addColorStop(0, 'rgba(0,0,0,1)');
+    gradient.addColorStop(0.7, 'rgba(0,0,0,0.8)');
+    gradient.addColorStop(1, 'rgba(0,0,0,0)');
+
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    ctx.arc(x, y, 40, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+  }, []);
+
   const features = [
     {
       icon: <Computer size={48} className="text-cyan-400" />,
@@ -38,55 +53,45 @@ function Home() {
   ];
 
   const categories = [
-    { name: "Programming", icon: <Code className="w-8 h-8" />, courses: 4, color: "bg-cyan-900/50 text-cyan-400 border-cyan-500/30" },
-    { name: "Design", icon: <Palette className="w-8 h-8" />, courses: 2, color: "bg-pink-900/50 text-pink-400 border-pink-500/30" },
-    { name: "Data Science", icon: <BarChart3 className="w-8 h-8" />, courses: 3, color: "bg-emerald-900/50 text-emerald-400 border-emerald-500/30" },
-    { name: "AI/ML", icon: <Brain className="w-8 h-8" />, courses: 2, color: "bg-purple-900/50 text-purple-400 border-purple-500/30" },
-    { name: "Security", icon: <Shield className="w-8 h-8" />, courses: 1, color: "bg-red-900/50 text-red-400 border-red-500/30" },
-    { name: "Writing", icon: <PenTool className="w-8 h-8" />, courses: 1, color: "bg-yellow-900/50 text-yellow-400 border-yellow-500/30" }
+    { name: "Programming", icon: <Code className="w-8 h-8" />, courses: 4, color: "bg-cyan-900/50 text-cyan-200 border-cyan-500/30" },
+    { name: "Design", icon: <Palette className="w-8 h-8" />, courses: 2, color: "bg-pink-900/50 text-pink-200 border-pink-500/30" },
+    { name: "Data Science", icon: <BarChart3 className="w-8 h-8" />, courses: 3, color: "bg-emerald-900/50 text-emerald-200 border-emerald-500/30" },
+    { name: "AI/ML", icon: <Brain className="w-8 h-8" />, courses: 2, color: "bg-purple-900/50 text-purple-200 border-purple-500/30" },
+    { name: "Security", icon: <Shield className="w-8 h-8" />, courses: 1, color: "bg-red-900/50 text-red-200 border-red-500/30" },
+    { name: "Writing", icon: <PenTool className="w-8 h-8" />, courses: 1, color: "bg-yellow-900/50 text-yellow-200 border-yellow-500/30" }
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-cyan-900">
-      {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="container mx-auto px-6 relative">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-cyan-900/30 border border-cyan-500/30 text-cyan-300 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
-              <Zap className="w-4 h-4 mr-2" />
-              Welcome to Learnovate
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              Explore New
-              <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent"> Knowledge </span>
-              from the Cosmos
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed max-w-3xl mx-auto">
-              Master programming, data science, design, and more with expert-led courses. 
-              Your gateway to exploring the vast universe of knowledge. Never Give Up!
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
-              <a
-                href="/courses"
-                className="group px-8 py-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-medium rounded-lg hover:from-gray-700 hover:to-gray-800 border border-gray-700/50 hover:border-gray-600 transition-all duration-300 flex items-center"
-              >
-                Start Learning Today
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </a>
-              
-              <button className="group flex items-center px-8 py-4 border-2 border-gray-600 text-gray-300 rounded-xl font-semibold text-lg hover:border-cyan-500 hover:text-cyan-300 transition-all duration-300 backdrop-blur-sm">
-                <Play className="mr-3 w-6 h-6 text-cyan-400" />
-                Watch Demo
-              </button>
-            </div>
+      <section className="py-20 overflow-hidden">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center px-4 py-2 bg-cyan-900/30 border border-cyan-500 text-cyan-300 rounded-full text-sm font-medium mb-6">
+            <Zap className="w-4 h-4 mr-2" />
+            Welcome to Learnovate
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            Explore New
+            <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent"> Knowledge </span>
+            from the Cosmos
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed max-w-3xl mx-auto">
+            Master programming, data science, design, and more with expert-led courses. Your gateway to exploring the vast universe of knowledge. Never Give Up!
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <a
+              href="/courses"
+              className="group px-8 py-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-medium rounded-lg hover:from-gray-700 hover:to-gray-800 border border-gray-700/50 hover:border-gray-600 transition-all duration-300 flex items-center"
+            >
+              Start Learning Today
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            </a>
+            <button className="group flex items-center px-8 py-4 border-2 border-gray-600 text-gray-300 rounded-xl font-semibold text-lg hover:border-cyan-500 hover:text-cyan-300 transition-all duration-300 backdrop-blur-sm">
+              <Play className="mr-3 w-6 h-6 text-cyan-400" />
+              Watch Demo
+            </button>
           </div>
         </div>
       </section>
-
-      {/* Stats Section */}
       <section className="py-16 bg-gray-800/50 border-y border-gray-700/50 backdrop-blur-sm">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -102,8 +107,6 @@ function Home() {
           </div>
         </div>
       </section>
-
-      {/* Features Section */}
       <section className="py-20 bg-gray-900/50">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
@@ -114,7 +117,7 @@ function Home() {
               Discover what makes our learning platform the perfect choice for your cosmic educational journey
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {features.map((feature, index) => (
               <a
@@ -140,8 +143,6 @@ function Home() {
           </div>
         </div>
       </section>
-
-      {/* Categories Section */}
       <section className="py-20 bg-black/30">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
@@ -152,21 +153,61 @@ function Home() {
               Explore our diverse range of subjects and find the perfect course for your cosmic journey
             </p>
           </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {categories.map((category, index) => (
-              <a
-                key={index}
-                href="/courses"
-                className={`group p-6 rounded-xl border backdrop-blur-sm hover:shadow-lg transition-all duration-300 text-center ${category.color} hover:scale-105`}
-              >
-                <div className="inline-flex p-3 rounded-lg mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {category.icon}
-                </div>
-                <h3 className="font-semibold mb-2">{category.name}</h3>
-                <p className="text-sm opacity-70">{category.courses} courses</p>
-              </a>
-            ))}
+
+          {/* Split Layout: Image Reveal + Categories */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            {/* Left Side: Image Reveal Section */}
+            <div className="relative w-full h-96 rounded-2xl overflow-hidden shadow-2xl order-2 lg:order-1">
+              <img
+                src={img}
+                alt="Categories showcase"
+                className="w-full h-full object-cover"
+              />
+              {/* Gradient overlay canvas for reveal effect */}
+              // Fixed canvas initialization section
+              <canvas
+                ref={(el) => {
+                  if (el && !el.dataset.initialized) {
+                    el.dataset.initialized = 'true';
+                    const ctx = el.getContext('2d');
+                    el.width = el.offsetWidth;
+                    el.height = el.offsetHeight;
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, el.width, el.height); 
+                  }
+                }}
+                className="absolute inset-0 w-full h-full cursor-none"
+                onMouseMove={(e) => {
+                  const canvas = e.currentTarget;
+                  const rect = canvas.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const y = e.clientY - rect.top;
+                  paintReveal(x, y, canvas);
+                }}
+                style={{ touchAction: 'none' }}
+              />
+            </div>
+
+            {/* Right Side: Categories Grid */}
+            <div className="order-1 lg:order-2">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                {categories.map((category, index) => (
+                  <a
+                    key={index}
+                    href="/courses"
+                    className={`group p-6 rounded-xl border backdrop-blur-sm hover:shadow-lg transition-all duration-300 text-center ${category.color} hover:scale-105`}
+                  >
+                    <div className="inline-flex p-3 rounded-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                      {category.icon}
+                    </div>
+                    <h3 className="font-semibold mb-2">{category.name}</h3>
+                    <p className="text-sm opacity-70">{category.courses} courses</p>
+                  </a>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
       </section>

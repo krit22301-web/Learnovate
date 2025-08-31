@@ -36,45 +36,45 @@ export const instructorsData = {
     students: 35000,
     expertise: ["Machine Learning", "Deep Learning", "Neural Networks", "AI Research"]
   },
-  "Angela Yu": {
+  "Harry Kane": {
     id: 3,
-    name: "Angela Yu",
+    name: "Harry Kane",
     specialty: "Web Development",
     bio: "Full-stack developer and educator with expertise in modern web technologies. Creator of popular programming bootcamps.",
-    image: yuimage, // Replace with actual image
+    image: yuimage,
     courses: ["The Complete Web Development Bootcamp"],
     experience: "10+ years",
     rating: 4.8,
     students: 200000,
     expertise: ["HTML", "CSS", "JavaScript", "React", "Node.js", "Full-Stack Development"]
   },
-  "Dr. Charles Severance": {
+  "Dr. Khushi kulshreshta": {
     id: 4,
-    name: "Dr. Charles Severance",
+    name: "Dr. Khushi kulshreshta",
     specialty: "Python Programming",
     bio: "Professor at University of Michigan, author of 'Python for Everybody' textbook. Passionate about making programming accessible to everyone.",
-    image: charlesimage, // Replace with actual image
+    image: charlesimage, 
     courses: ["Python for Everybody"],
     experience: "20+ years",
     rating: 4.9,
     students: 300000,
     expertise: ["Python", "Data Analysis", "Web Programming", "Database Design"]
   },
-  "Eva Fox": {
+  "Alex Carey": {
     id: 5,
-    name: "Eva Fox",
+    name: "Alex Carey",
     specialty: "Digital Marketing",
     bio: "Digital marketing strategist with experience working with Fortune 500 companies. Expert in SEO, social media, and data-driven marketing.",
-    image: foximage, // Replace with actual image
+    image: foximage,
     courses: ["Digital Marketing Masterclass"],
     experience: "8+ years",
     rating: 4.5,
     students: 45000,
     expertise: ["SEO", "Social Media Marketing", "Email Marketing", "Analytics", "PPC"]
   },
-  "Prof. Andrew Ng": {
+  "Riya Singh": {
     id: 6,
-    name: "Prof. Andrew Ng",
+    name: "Riya Singh",
     specialty: "Artificial Intelligence",
     bio: "Co-founder of Coursera, former Stanford professor, and AI pioneer. Founded Google Brain and was Chief Scientist at Baidu.",
     image: ngimage,
@@ -84,9 +84,9 @@ export const instructorsData = {
     students: 500000,
     expertise: ["AI", "Machine Learning", "Deep Learning", "Computer Vision", "NLP"]
   },
-  "John Doe": {
+  "Lamine Yamal": {
     id: 7,
-    name: "John Doe",
+    name: "Lamine Yamal",
     specialty: "Graphic Design",
     bio: "Creative director with 15 years of experience in branding and visual design. Has worked with major brands and design agencies.",
     image: doeimage,
@@ -132,9 +132,9 @@ export const instructorsData = {
     students: 30000,
     expertise: ["Network Security", "Threat Analysis", "Penetration Testing", "Security Architecture"]
   },
-  "Olivia White": {
+  "Olivi White": {
     id: 11,
-    name: "Olivia White",
+    name: "Olivi White",
     specialty: "Creative Writing",
     bio: "Published author and writing workshop facilitator. Has helped hundreds of aspiring writers develop their craft and find their voice.",
     image: whiteimage,
@@ -144,9 +144,9 @@ export const instructorsData = {
     students: 15000,
     expertise: ["Creative Writing", "Storytelling", "Character Development", "Publishing"]
   },
-  "Dr. Emily Carter": {
+  "Dr. John Carter": {
     id: 12,
-    name: "Dr. Emily Carter",
+    name: "Dr. John Carter",
     specialty: "JavaScript Development",
     bio: "Senior software engineer and JavaScript expert. Contributor to open-source projects and speaker at major tech conferences.",
     image: carterimage,

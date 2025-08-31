@@ -6,7 +6,7 @@ import p3 from '../assets/pfp-3.jpg'
 import p4 from '../assets/pfp-4.jpg'
 
 function About() {
-  const testimonials = [
+  const reviews = [
     {
       id: 1,
       name: "Om Swami",
@@ -34,31 +34,29 @@ function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
-      <div className="container mx-auto px-4 py-8 sm:py-12 relative z-10">
-        {/* Header Section */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+      <div className="container mx-auto px-4 py-8">
+
+        <div className="text-center mb-12">
+          <h1 className="text-3xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-200 to-purple-900 bg-clip-text text-transparent">
             About Learnovate
           </h1>
-          <p className="text-lg sm:text-xl max-w-3xl mx-auto px-4 text-gray-300">
+          <p className="text-lg max-w-3xl mx-auto text-gray-300">
             Revolutionizing education by bringing cutting-edge knowledge and skills to learners worldwide through innovative technology and expert instruction.
           </p>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-16">
-          {/* Mission Card */}
-          <div className="group hover:scale-105 transition-all duration-500 cursor-pointer">
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 sm:p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-cyan-500/50 shadow-lg hover:shadow-cyan-500/20">
-              <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 p-4 rounded-full w-20 h-20 mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+          <div className="group hover:scale-105 duration-500">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-cyan-500/50 shadow-lg hover:shadow-cyan-500/20">
+              <div className="bg-gradient-to-br from-cyan-300 to-cyan-600 p-4 rounded-full w-20 h-20 mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Target className="w-12 h-12 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-4 text-cyan-400">Our Mission</h3>
-              <p className="text-sm sm:text-base mb-6 text-gray-300">
+              <h3 className="text-2xl font-bold mb-4 text-cyan-400">Our Mission</h3>
+              <p className="mb-6 text-gray-300">
                 At Learnovate, our mission is to revolutionize the way people learn by making education accessible, engaging, and impactful. We are committed to:
               </p>
-              <ul className="text-sm sm:text-base space-y-3 text-left">
+              <ul className="space-y-3 text-left">
                 <li className="flex items-start space-x-2">
                   <span className="text-cyan-400 font-bold">✨</span>
                   <span className="text-gray-300"><strong className="text-white">Empowering Learners:</strong> Offering expertly designed courses that help individuals master new skills and excel in their careers.</span>
@@ -79,14 +77,14 @@ function About() {
             </div>
           </div>
 
-          {/* Global Reach Card */}
-          <div className="group hover:scale-105 transition-all duration-500 cursor-pointer">
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 sm:p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-purple-500/50 shadow-lg hover:shadow-purple-500/20">
-              <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-4 rounded-full w-20 h-20 mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+
+          <div className="group hover:scale-105 duration-500">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-purple-500/50 shadow-lg hover:shadow-purple-500/20">
+              <div className="bg-gradient-to-br from-purple-300 to-purple-600 p-4 rounded-full w-20 h-20 mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Globe className="w-12 h-12 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-6 text-purple-400">Global Reach</h3>
-              <ul className="text-sm sm:text-base space-y-3 text-left">
+              <h3 className="text-2xl font-bold mb-6 text-purple-400">Global Reach</h3>
+              <ul className="space-y-3 text-left">
                 <li className="flex items-start space-x-2">
                   <span className="text-cyan-400 font-bold">🌏</span>
                   <span className="text-gray-300">Accessible education for everyone, regardless of location or background.</span>
@@ -111,17 +109,17 @@ function About() {
             </div>
           </div>
 
-          {/* Vision Card */}
-          <div className="group hover:scale-105 transition-all duration-500 cursor-pointer">
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 sm:p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-cyan-500/50 shadow-lg hover:shadow-cyan-500/20">
+
+          <div className="group hover:scale-105 transition-all duration-500">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-cyan-500/50 shadow-lg hover:shadow-cyan-500/20">
               <div className="bg-gradient-to-br from-cyan-500 to-purple-500 p-4 rounded-full w-20 h-20 mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Telescope className="w-12 h-12 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-4 text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text">Our Vision</h3>
+              <h3 className="text-2xl font-bold mb-4 text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text">Our Vision</h3>
               <p className="mb-6 text-gray-300">
                 <span className="text-yellow-400 font-bold">✨</span> Empowering individuals to achieve their fullest potential through accessible and innovative education.
               </p>
-              <ul className="text-sm sm:text-base space-y-3 text-left">
+              <ul className="space-y-3 text-left">
                 <li className="flex items-start space-x-2">
                   <span className="text-purple-400 font-bold">🎓</span>
                   <span className="text-gray-300">Democratizing education so everyone has a chance to learn.</span>
@@ -147,37 +145,33 @@ function About() {
           </div>
         </div>
 
-        {/* Testimonials Section */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
             What Our Learners Say
           </h2>
-          <p className="text-lg sm:text-xl max-w-2xl mx-auto px-4 pb-8 text-gray-300">
+
+          <p className="text-lg max-w-2xl mx-auto pb-8 text-gray-300">
             Discover how Learnovate has transformed lives across the globe.
           </p>
 
-          {/* Testimonials Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <div 
-                key={testimonial.id}
+            {reviews.map((review) => (
+              <div
+                key={review.id}
                 className="group bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-cyan-500/20"
               >
                 <div className="flex flex-col items-center text-center">
-                  <img 
-                    src={testimonial.image} 
-                    alt={testimonial.name}
-                    className="w-20 h-20 rounded-full object-cover mb-4 border-4 border-gradient-to-r from-cyan-400 to-purple-400 group-hover:scale-110 transition-transform duration-300" 
+                  <img
+                    src={review.image}
+                    alt={review.name}
+                    className="w-20 h-20 rounded-full object-cover mb-4 border-4 border-gradient-to-r from-cyan-400 to-purple-400 group-hover:scale-110 transition-transform duration-300"
                   />
-                  <h3 className="text-xl font-bold mb-3 text-white">{testimonial.name}</h3>
-                  <p className="text-sm text-gray-300 leading-relaxed">
-                    {testimonial.text}
+                  <h3 className="text-xl font-bold mb-3 text-white">{review.name}</h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    {review.text}
                   </p>
-                  {/* Star rating */}
                   <div className="flex mt-4 space-x-1">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-yellow-400">⭐</span>
-                    ))}
+                    <span>{"⭐".repeat(5)}</span>
                   </div>
                 </div>
               </div>

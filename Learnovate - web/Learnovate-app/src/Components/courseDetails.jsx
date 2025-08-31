@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Star, Play, Lock, CheckCircle, Trophy } from 'lucide-react';
 import ReactPlayer from 'react-player';
 import { useParams } from 'react-router-dom';
-import { courses } from '../data/coursedata'; // Import from your data file
+import { courses } from '../data/coursedata';
 
 function CourseDetails() {
   const { id: courseId } = useParams(); // Get 'id' from URL and rename it to 'courseId' 

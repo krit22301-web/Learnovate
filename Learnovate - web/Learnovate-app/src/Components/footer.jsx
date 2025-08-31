@@ -1,20 +1,5 @@
 import React from 'react';
-import { 
-  Instagram, 
-  Twitter, 
-  Facebook, 
-  Linkedin, 
-  Mail,
-  MapPin,
-  Phone,
-  Github,
-  BookOpen,
-  ArrowRight,
-  Heart,
-  Star,
-  Users,
-  Award
-} from 'lucide-react';
+import { Instagram, Twitter, Facebook, Linkedin, Mail, MapPin, Phone, Github, BookOpen, ArrowRight, Heart, Star, Users, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 function Footer() {
@@ -39,9 +24,9 @@ function Footer() {
   const socialLinks = [
     { name: 'Facebook', icon: <Facebook size={20} />, url: '#', color: 'hover:text-blue-400' },
     { name: 'Twitter', icon: <Twitter size={20} />, url: '#', color: 'hover:text-sky-400' },
-    { name: 'Instagram', icon: <Instagram size={20} />, url: '#', color: 'hover:text-pink-400' },
+    { name: 'Instagram', icon: <Instagram size={20} />, url: '#', color: 'hover:text-pink-500' },
     { name: 'LinkedIn', icon: <Linkedin size={20} />, url: '#', color: 'hover:text-blue-600' },
-    { name: 'GitHub', icon: <Github size={20} />, url: '#', color: 'hover:text-gray-300' }
+    { name: 'GitHub', icon: <Github size={20} />, url: '#', color: 'hover:text-blue-900' }
   ];
 
   const stats = [
@@ -53,9 +38,7 @@ function Footer() {
 
   return (
     <footer className="bg-gradient-to-r from-black to-cyan-900 text-white">
-      {/* Main Footer Content */}
       <div className="container mx-auto px-6 py-16">
-        {/* Newsletter Section */}
         <div className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-8 mb-16">
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="text-3xl font-bold mb-4">Stay Updated with Learnovate</h3>
@@ -67,7 +50,7 @@ function Footer() {
                 <input
                   type="email"
                   placeholder="Enter your email address"
-                  className="w-full px-6 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-white focus:outline-none"
+                  className="w-full px-6 py-3 rounded-lg text-gray-900 placeholder-gray-500"
                 />
               </div>
               <button className="px-8 py-3 bg-white text-cyan-600 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center">
@@ -78,7 +61,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* Stats Section */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
@@ -91,9 +73,7 @@ function Footer() {
           ))}
         </div>
 
-        {/* Main Footer Links */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
-          {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
               <BookOpen className="w-8 h-8 text-cyan-500" />
@@ -103,8 +83,6 @@ function Footer() {
               Exploring the cosmos, one course at a time. Never Giving Up!
               Transform your career with our expert-led courses and hands-on projects.
             </p>
-            
-            {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-center text-gray-300">
                 <Mail className="w-4 h-4 mr-3 text-cyan-500" />
@@ -125,14 +103,13 @@ function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h4 className="text-lg font-semibold mb-6 text-white">Quick Links</h4>
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <Link 
-                    to={link.path} 
+                  <Link
+                    to={link.path}
                     className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 inline-block"
                   >
                     {link.name}
@@ -141,15 +118,13 @@ function Footer() {
               ))}
             </ul>
           </div>
-
-          {/* Support */}
           <div>
             <h4 className="text-lg font-semibold mb-6 text-white">Support</h4>
             <ul className="space-y-3">
               {support.map((item, index) => (
                 <li key={index}>
-                  <Link 
-                    to={item.path} 
+                  <Link
+                    to={item.path}
                     className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 inline-block"
                   >
                     {item.name}
@@ -159,8 +134,6 @@ function Footer() {
             </ul>
           </div>
         </div>
-
-        {/* Social Media Section */}
         <div className="border-t border-gray-700 pt-8 mb-8">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="mb-6 md:mb-0">
@@ -181,8 +154,6 @@ function Footer() {
           </div>
         </div>
       </div>
-
-      {/* Bottom Bar */}
       <div className="border-t border-gray-700 bg-gray-800">
         <div className="container mx-auto px-6 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between">
@@ -193,7 +164,7 @@ function Footer() {
                 Made with <Heart className="w-4 h-4 mx-1 text-red-500" /> in India
               </span>
             </div>
-            
+
             <div className="flex items-center space-x-6 text-sm text-gray-400">
               <Link to="/privacy" className="hover:text-white transition-colors duration-200">
                 Privacy Policy

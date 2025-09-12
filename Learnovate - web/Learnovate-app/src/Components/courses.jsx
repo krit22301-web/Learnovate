@@ -61,7 +61,7 @@ function Courses() {
             <motion.div
               key={course.id}
               whileHover={{ scale: 1.05, y: -5 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.1 }}
               className="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-lg overflow-hidden cursor-pointer border border-gray-700/50 hover:border-cyan-500/50 hover:shadow-cyan-500/20 transition-all duration-500"
               onClick={() => handleClick(course.id)}
             >
@@ -79,7 +79,7 @@ function Courses() {
               </div>
 
               <div className="p-6">
-                <h3 className="font-bold text-xl mb-3 text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-300">
+                <h3 className="font-bold text-xl mb-3 text-white group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-300">
                   {course.title}
                 </h3>
 
@@ -99,8 +99,8 @@ function Courses() {
                     <span>{course.lectures} Lectures</span>
                   </span>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${course.difficulty === 'Beginner' ? 'bg-green-500/20 text-green-400' :
-                      course.difficulty === 'Intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
-                        'bg-red-500/20 text-red-400'
+                    course.difficulty === 'Intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
+                      'bg-red-500/20 text-red-400'
                     }`}>
                     {course.difficulty}
                   </span>

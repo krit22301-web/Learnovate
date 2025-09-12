@@ -1,37 +1,9 @@
-import React, { useState } from 'react';
-import { Award, Globe, Computer, Users, Star, BookOpen, Filter, Zap } from 'lucide-react';
+import React from 'react';
+import { Award, Globe, Computer, Users, Star, BookOpen, Zap } from 'lucide-react';
 import { getAllInstructors } from '../data/instructorsData';
 
 function Instructors() {
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const instructors = getAllInstructors();
-  
-  // Get unique specialties for filtering
-  const categories = ['All', ...new Set(instructors.map(instructor => 
-    instructor.specialty.split(' ')[instructor.specialty.split(' ').length - 1] === 'Development' ||
-    instructor.specialty.split(' ')[instructor.specialty.split(' ').length - 1] === 'Programming' ? 'Programming' :
-    instructor.specialty.includes('Machine Learning') || instructor.specialty.includes('AI') ? 'AI/ML' :
-    instructor.specialty.includes('Data') ? 'Data Science' :
-    instructor.specialty.includes('Marketing') ? 'Marketing' :
-    instructor.specialty.includes('Design') ? 'Design' :
-    instructor.specialty.includes('Finance') ? 'Finance' :
-    instructor.specialty.includes('Security') ? 'Security' :
-    instructor.specialty.includes('Writing') ? 'Writing' : 'Other'
-  ))];
-
-  const filteredInstructors = selectedCategory === 'All' 
-    ? instructors 
-    : instructors.filter(instructor => {
-        const category = instructor.specialty.includes('Development') || instructor.specialty.includes('Programming') ? 'Programming' :
-          instructor.specialty.includes('Machine Learning') || instructor.specialty.includes('AI') ? 'AI/ML' :
-          instructor.specialty.includes('Data') ? 'Data Science' :
-          instructor.specialty.includes('Marketing') ? 'Marketing' :
-          instructor.specialty.includes('Design') ? 'Design' :
-          instructor.specialty.includes('Finance') ? 'Finance' :
-          instructor.specialty.includes('Security') ? 'Security' :
-          instructor.specialty.includes('Writing') ? 'Writing' : 'Other';
-        return category === selectedCategory;
-      });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
@@ -44,29 +16,6 @@ function Instructors() {
           <p className="text-lg sm:text-xl max-w-3xl mx-auto px-4 text-gray-300">
             Learn from industry leaders and experienced educators who are passionate about sharing their knowledge
           </p>
-        </div>
-
-        {/* Filter Section */}
-        <div className="mb-8 sm:mb-12">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Filter className="text-cyan-400" size={20} />
-            <span className="text-gray-300 font-medium">Filter by expertise:</span>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3">
-            {categories.map(category => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 sm:px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
-                  selectedCategory === category
-                    ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg shadow-cyan-500/25'
-                    : 'bg-gradient-to-br from-gray-800 to-gray-900 text-gray-300 hover:text-white border border-gray-700/50 hover:border-cyan-500/50 shadow-lg'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* Stats Overview */}
@@ -101,20 +50,12 @@ function Instructors() {
 
         {/* Instructors Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
-          {filteredInstructors.map(instructor => (
-            <div 
-              key={instructor.id} 
-              className="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-500 hover:scale-105 hover:shadow-cyan-500/20"
-            >
-              {/* Instructor Image & Header */}
-              <div className="relative p-6 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-medium rounded-lg hover:from-gray-700 hover:to-gray-800 border border-gray-700/50 hover:border-gray-600 ">
+          {instructors.map(instructor => (
+            <div key={instructor.id} className="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-500 hover:scale-105 hover:shadow-cyan-500/20">
+              <div className="relative p-6 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-medium rounded-lg hover:from-gray-700 hover:to-gray-800 border border-gray-700/50 hover:border-gray-600">
                 <div className="flex items-start space-x-4">
                   <div className="relative">
-                    <img
-                      src={instructor.image} 
-                      alt={instructor.name}
-                      className="w-16 sm:w-20 h-16 sm:h-20 rounded-full object-cover border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-300"
-                    />
+                    <img src={instructor.image} alt={instructor.name} className="w-16 sm:w-20 h-16 sm:h-20 rounded-full object-cover border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-300" />
                     <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-2 border-white flex items-center justify-center">
                       <Zap className="w-3 h-3 text-white" />
                     </div>
@@ -124,22 +65,17 @@ function Instructors() {
                     <p className="text-cyan-100 text-sm font-medium">{instructor.specialty}</p>
                     <div className="flex items-center mt-2">
                       {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          className={`w-4 h-4 ${i < Math.floor(instructor.rating) ? 'text-yellow-300 fill-current' : 'text-gray-400'}`}
-                        />
+                        <Star key={i} className={`w-4 h-4 ${i < Math.floor(instructor.rating) ? 'text-yellow-300 fill-current' : 'text-gray-400'}`} />
                       ))}
                       <span className="ml-2 text-sm font-medium">{instructor.rating}</span>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* Content */}
+              
               <div className="p-6">
                 <p className="text-gray-300 mb-4 text-sm leading-relaxed">{instructor.bio}</p>
                 
-                {/* Stats */}
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div className="text-center p-3 bg-gradient-to-br from-gray-700/50 to-gray-800/50 rounded-xl border border-gray-600/30">
                     <p className="text-xl sm:text-2xl font-bold text-cyan-400">{instructor.students.toLocaleString()}+</p>
@@ -151,15 +87,11 @@ function Instructors() {
                   </div>
                 </div>
 
-                {/* Expertise Tags */}
                 <div className="mb-4">
                   <p className="text-sm font-medium text-gray-300 mb-2">Expertise:</p>
                   <div className="flex flex-wrap gap-2">
                     {instructor.expertise.slice(0, 3).map((skill, index) => (
-                      <span 
-                        key={index}
-                        className="px-3 py-1 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border border-cyan-500/30 rounded-full text-xs font-medium"
-                      >
+                      <span key={index} className="px-3 py-1 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border border-cyan-500/30 rounded-full text-xs font-medium">
                         {skill}
                       </span>
                     ))}
@@ -171,7 +103,6 @@ function Instructors() {
                   </div>
                 </div>
 
-                {/* Courses */}
                 <div className="mb-6">
                   <p className="text-sm font-medium text-gray-300 mb-2">Teaching:</p>
                   <div className="space-y-1">
@@ -184,7 +115,6 @@ function Instructors() {
                   </div>
                 </div>
 
-                {/* Action Icons */}
                 <div className="flex justify-center space-x-8 pt-4 border-t border-gray-700/50">
                   <div className="flex flex-col items-center group/icon">
                     <Computer size={20} className="text-purple-400 mb-1 group-hover/icon:scale-110 transition-transform duration-200" />
@@ -203,17 +133,6 @@ function Instructors() {
             </div>
           ))}
         </div>
-
-        {/* No Results Message */}
-        {filteredInstructors.length === 0 && (
-          <div className="text-center py-12">
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl border border-gray-700/50 max-w-md mx-auto">
-              <Filter className="mx-auto mb-4 text-gray-500" size={48} />
-              <p className="text-xl text-gray-400 mb-2">No instructors found</p>
-              <p className="text-sm text-gray-500">Try selecting a different category to see more instructors.</p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

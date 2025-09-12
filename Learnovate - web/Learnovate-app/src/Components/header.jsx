@@ -1,95 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, User, LogOut, ChevronDown, Bell} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { BookOpen, Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [username, setUsername] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [username, setUsername] = useState(localStorage.getItem('username'));
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     checkAuthStatus();
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
     setIsMenuOpen(false);
     setIsProfileDropdownOpen(false);
-  }, [location]);
+  }, []);
 
   const checkAuthStatus = async () => {
-    try {
-      const response = await fetch('https://backend-test-k5py.onrender.com/user/verify', {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUsername(data.user.username);
-        localStorage.setItem('username', data.user.username);
-      } else {
-        setUsername(null);
-        localStorage.removeItem('username');
+    const response = await fetch('https://backend-test-k5py.onrender.com/user/verify', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
       }
-    } catch (error) {
-      console.error('Auth check failed:', error);
-      const savedUser = localStorage.getItem('username');
-      if (savedUser) {
-        setUsername(savedUser);
-      }
-    } finally {
-      setIsLoading(false);
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setUsername(data.user.username);
+      localStorage.setItem('username', data.user.username);
+    } else {
+      setUsername(null);
+      localStorage.removeItem('username');
     }
   };
 
   const handleLogout = async () => {
-    try {
-      const response = await fetch('https://backend-test-k5py.onrender.com/user/logout', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (response.ok) {
-        setUsername(null);
-        localStorage.removeItem('username');
-        setIsMenuOpen(false);
-        setIsProfileDropdownOpen(false);
-        window.location.href = '/';
-      } else {
-        console.error('Logout failed');
-        // Force logout locally anyway
-        setUsername(null);
-        localStorage.removeItem('username');
-        setIsMenuOpen(false);
-        setIsProfileDropdownOpen(false);
-        window.location.href = '/';
+    const response = await fetch('https://backend-test-k5py.onrender.com/user/logout', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
       }
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Force logout locally anyway
-      setUsername(null);
-      localStorage.removeItem('username');
-      setIsMenuOpen(false);
-      setIsProfileDropdownOpen(false);
-      window.location.href = '/';
-    }
+    });
+    setUsername(null);
+    localStorage.removeItem('username');
+    setIsMenuOpen(false);
+    setIsProfileDropdownOpen(false);
+    window.location.href = '/';
   };
 
   const isActiveRoute = (path) => {
@@ -105,91 +62,54 @@ function Header() {
 
   return (
     <>
-      <header 
-        className= "fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white"
-      >
+      <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
         <div className="container mx-auto px-4 lg:px-6">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="flex items-center space-x-3 group"
               onClick={() => setIsMenuOpen(false)}
             >
               <div className="relative">
-                <BookOpen 
-                  className={`w-8 h-8 transition-colors duration-300 ${
-                    scrolled ? 'text-cyan-400' : 'text-cyan-500'
-                  }`} 
-                />
+                <BookOpen className={"w-8 h-8 transition-colors duration-300 text-cyan-400"}/>
                 <div className="absolute inset-0 bg-cyan-500 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
               </div>
-              <span className={`text-xl font-bold transition-colors duration-300 ${
-                scrolled ? 'text-white' : 'text-gray-100'
-              }`}>
+              <span className="text-xl font-bold transition-colors duration-300 text-gray-100">
                 Learnovate
               </span>
             </Link>
-            
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-1">
+            <nav className="lg:flex items-center space-x-1">
               {navigationLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                    isActiveRoute(link.path)
-                      ? 'text-cyan-400 bg-cyan-900/50 border border-cyan-500/30'
-                      : scrolled
-                      ? 'text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50'
-                      : 'text-gray-200 hover:text-cyan-400 hover:bg-gray-800/30'
-                  }`}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${isActiveRoute(link.path) ? 'text-cyan-400 bg-cyan-900/50 border border-cyan-500/30' : 'text-gray-200 hover:text-cyan-400 hover:bg-gray-800/30'}`}
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
-            
-            {/* User Actions */}
             <div className="hidden lg:flex items-center space-x-4">
-              {isLoading ? (
-                <div className="flex items-center space-x-3">
-                  <div className="animate-pulse bg-gray-700 h-8 w-20 rounded-lg"></div>
-                  <div className="animate-pulse bg-gray-700 h-8 w-8 rounded-full"></div>
-                </div>
-              ) : username ? (
+              {username ? (
                 <div className="flex items-center space-x-4">
-                  {/* Notifications */}
-                  <button className="relative p-2 text-gray-400 hover:text-cyan-400 hover:bg-gray-800/50 rounded-lg transition-all duration-200">
-                    <Bell className="w-5 h-5" />
-                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-500 rounded-full text-xs border border-gray-900"></span>
-                  </button>
-                  
-                  {/* Profile Dropdown */}
                   <div className="relative">
                     <button
                       onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                      className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-800/50 transition-all duration-200 group"
-                    >
+                      className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-800/50 transition-all duration-200 group">
                       <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm border border-cyan-400/30">
                         {username.charAt(0).toUpperCase()}
                       </div>
                       <span className="font-medium text-gray-300 group-hover:text-white">
                         {username}
                       </span>
-                      <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
-                        isProfileDropdownOpen ? 'rotate-180' : ''
-                      }`} />
+                      <ChevronDown className="w-4 h-4 text-gray-500 transition-transform duration-200"/>
                     </button>
-                    
-                    {/* Dropdown Menu */}
                     {isProfileDropdownOpen && (
                       <div className="absolute right-0 top-full mt-2 w-64 bg-gray-800 backdrop-blur-sm rounded-xl shadow-lg shadow-cyan-500/10 border border-gray-700/50 py-2 z-50">
                         <div className="px-4 py-3 border-b border-gray-700/50">
                           <p className="font-semibold text-white">{username}</p>
                           <p className="text-sm text-gray-400">learner@Learnovate.com</p>
                         </div>
-                        
                         <Link
                           to="/profilepage"
                           className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700/50 hover:text-cyan-400 transition-colors duration-200"
@@ -198,7 +118,7 @@ function Header() {
                           <User className="w-4 h-4 mr-3" />
                           My Profile
                         </Link>
-                        
+
                         <div className="border-t border-gray-700/50 mt-2 pt-2">
                           <button
                             onClick={handleLogout}
@@ -229,8 +149,6 @@ function Header() {
                 </div>
               )}
             </div>
-
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden p-2 rounded-lg hover:bg-gray-800/50 transition-colors duration-200"
@@ -244,37 +162,28 @@ function Header() {
             </button>
           </div>
         </div>
-        
-        {/* Mobile Menu */}
-        <div className={`lg:hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen 
-            ? 'max-h-screen opacity-100' 
+        <div className={`lg:hidden transition-all duration-300 ease-in-out ${isMenuOpen
+            ? 'max-h-screen opacity-100'
             : 'max-h-0 opacity-0 overflow-hidden'
-        }`}>
+          }`}>
           <div className="bg-gray-800/95 backdrop-blur-sm border-t border-gray-700/50">
             <div className="container mx-auto px-4 py-4">
-              {/* Mobile Navigation Links */}
               <nav className="space-y-1 mb-6">
                 {navigationLinks.map((link) => (
                   <Link
                     key={link.path}
                     to={link.path}
                     onClick={() => setIsMenuOpen(false)}
-                    className={`block px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${
-                      isActiveRoute(link.path)
+                    className={`block px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${isActiveRoute(link.path)
                         ? 'text-cyan-400 bg-cyan-900/30 border border-cyan-500/20'
                         : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
-                    }`}
+                      }`}
                   >
                     {link.label}
                   </Link>
                 ))}
               </nav>
-              
-              {/* Mobile User Actions */}
-              {isLoading ? (
-                <div className="animate-pulse bg-gray-700 h-12 w-full rounded-lg"></div>
-              ) : username ? (
+              {username ? (
                 <div className="border-t border-gray-700/50 pt-4">
                   <div className="flex items-center space-x-3 mb-4">
                     <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold border border-cyan-400/30">
@@ -285,7 +194,6 @@ function Header() {
                       <p className="text-sm text-gray-400">learner@Learnovate.com</p>
                     </div>
                   </div>
-                  
                   <div className="space-y-2">
                     <Link
                       to="/profilepage"
@@ -294,7 +202,7 @@ function Header() {
                     >
                       <User className="w-4 h-4 mr-3" />
                       My Profile
-                    </Link>     
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="flex items-center w-full px-4 py-3 text-red-400 hover:bg-red-900/20 hover:text-red-300 rounded-lg transition-colors duration-200"
@@ -326,13 +234,9 @@ function Header() {
           </div>
         </div>
       </header>
-      
-      {/* Spacer to prevent content from going under fixed header */}
       <div className="h-16"></div>
-      
-      {/* Click outside handler for dropdown */}
       {isProfileDropdownOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40"
           onClick={() => setIsProfileDropdownOpen(false)}
         />

@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {
-    User, Mail, Phone, MapPin, School, BookOpen, Star, Calendar,
-    Edit3, Save, X, Award, Target, ShoppingCart, Clock, CheckCircle
-} from 'lucide-react';
+import { User, Mail, Phone, MapPin, School, BookOpen, Star, Calendar, Edit3, Save, X, Award, Target, ShoppingCart, CheckCircle } from 'lucide-react';
 
-const API_BASE_URL = 'https://backend-test-k5py.onrender.com';
+const URL = 'https://backend-test-k5py.onrender.com';
 
 function ProfilePage() {
     const [isEditing, setIsEditing] = useState(false);
@@ -16,59 +13,57 @@ function ProfilePage() {
         phone: '',
         address: '',
         school: '',
-        bio: '',
         skills: [],
         interests: [],
         joinDate: '',
         completedCourses: 0,
-        totalHours: 0,
         purchasedCourses: []
     });
     const [isLoadingProfile, setIsLoadingProfile] = useState(true);
     const [saveMessage, setSaveMessage] = useState('');
     const [error, setError] = useState('');
     const [editForm, setEditForm] = useState({ ...userProfile });
+    const [rawInputs, setRawInputs] = useState({
+        skills: '',
+        interests: ''
+    });
 
     useEffect(() => {
         fetchUserProfile();
     }, []);
 
-    const fetchUserProfile = async () => {
-        try {
-            setIsLoadingProfile(true);
-            setError('');
-
-            const response = await fetch(`${API_BASE_URL}/user/profile`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' }
+    useEffect(() => {
+        if (isEditing) {
+            setRawInputs({
+                skills: Array.isArray(editForm.skills) ? editForm.skills.join(', ') : '',
+                interests: Array.isArray(editForm.interests) ? editForm.interests.join(', ') : ''
             });
-
-            if (response.ok) {
-                const data = await response.json();
-                setUserProfile(data.profile);
-                setEditForm(data.profile);
-            } else if (response.status === 401) {
-                setError('Please log in to view your profile');
-                window.location.href = '/login';
-            } else if (response.status !== 404) {
-                const errorData = await response.json();
-                setError(errorData.error || 'Failed to fetch profile');
-            }
-        } catch (error) {
-            console.error('Error fetching profile:', error);
-            setError('Network error. Please check your connection.');
-        } finally {
-            setIsLoadingProfile(false);
         }
+    }, [isEditing]);
+
+    const fetchUserProfile = async () => {
+        setIsLoadingProfile(true);
+        const response = await fetch(`${URL}/user/profile`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            setUserProfile(data.profile);
+            setEditForm(data.profile);
+        }
+        setIsLoadingProfile(false);
     };
 
     const handleSave = async () => {
         try {
             setSaveMessage('Saving...');
             setError('');
+            const processedSkills = rawInputs.skills.split(',').map(item => item.trim()).filter(Boolean);
+            const processedInterests = rawInputs.interests.split(',').map(item => item.trim()).filter(Boolean);
 
-            const response = await fetch(`${API_BASE_URL}/user/profile`, {
+            const response = await fetch(`${URL}/user/profile`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -77,12 +72,10 @@ function ProfilePage() {
                     phone: editForm.phone || '',
                     address: editForm.address || '',
                     school: editForm.school || '',
-                    bio: editForm.bio || '',
-                    skills: Array.isArray(editForm.skills) ? editForm.skills : [],
-                    interests: Array.isArray(editForm.interests) ? editForm.interests : []
+                    skills: processedSkills,
+                    interests: processedInterests
                 })
             });
-
             if (response.ok) {
                 const data = await response.json();
                 setUserProfile(data.profile);
@@ -90,17 +83,16 @@ function ProfilePage() {
                 setIsEditing(false);
                 setSaveMessage('Profile saved successfully!');
                 setTimeout(() => setSaveMessage(''), 3000);
-            } else if (response.status === 401) {
-                setError('Please log in to save your profile');
-                window.location.href = '/login';
             } else {
                 const errorData = await response.json();
                 setError(errorData.error || 'Failed to save profile');
+                setTimeout(() => setError(''), 4000);
                 setSaveMessage('');
             }
         } catch (error) {
             console.error('Error saving profile:', error);
             setError('Network error. Please try again.');
+            setTimeout(() => setError(''), 5000);
             setSaveMessage('');
         }
     };
@@ -114,14 +106,20 @@ function ProfilePage() {
         setEditForm({ ...userProfile });
         setIsEditing(false);
         setError('');
+        setRawInputs({
+            skills: '',
+            interests: ''
+        });
     };
 
     const handleInputChange = (field, value) => {
         setEditForm({ ...editForm, [field]: value });
     };
-
-    const handleArrayChange = (field, value) => {
-        const array = value.split(',').map(item => item.trim()).filter(item => item);
+    const handleRawInputChange = (field, value) => {
+        setRawInputs({ ...rawInputs, [field]: value });
+    };
+    const processArrayField = (field, value) => {
+        const array = value.split(',').map(item => item.trim()).filter(Boolean);
         setEditForm({ ...editForm, [field]: array });
     };
 
@@ -131,30 +129,13 @@ function ProfilePage() {
         return 'bg-gradient-to-r from-cyan-400 to-blue-500';
     };
 
-    const getStatusBadge = (status) => {
-        if (status === 'completed') {
-            return (
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-green-500 to-emerald-500 text-white">
-                    <CheckCircle size={12} className="mr-1" />
-                    Completed
-                </span>
-            );
-        }
-        return (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-cyan-500 to-purple-500 text-white">
-                <Clock size={12} className="mr-1" />
-                In Progress
-            </span>
-        );
-    };
-
     const activeCourses = userProfile.purchasedCourses?.filter(c => c.status === 'in-progress').length || 0;
 
     if (isLoadingProfile) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-32 w-32 border-4 border-cyan-500 border-t-transparent mx-auto mb-6"></div>
+                    <div className="animate-spin rounded-full h-32 w-32 border-4 border-black border-t-transparent mx-auto mb-6"></div>
                     <p className="text-xl text-gray-300">Loading your profile...</p>
                 </div>
             </div>
@@ -173,8 +154,6 @@ function ProfilePage() {
                         {error}
                     </motion.div>
                 )}
-
-                {/* Profile Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -222,12 +201,9 @@ function ProfilePage() {
                             )}
                         </motion.button>
                     </div>
-
-                    {/* Stats Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {[
                             { icon: BookOpen, label: 'Completed Courses', value: userProfile.completedCourses || 0, color: 'from-blue-500 to-cyan-500' },
-                            { icon: Clock, label: 'Learning Hours', value: userProfile.totalHours || 0, color: 'from-green-500 to-emerald-500' },
                             { icon: Award, label: 'Active Courses', value: activeCourses, color: 'from-purple-500 to-pink-500' }
                         ].map((stat, index) => (
                             <motion.div
@@ -310,10 +286,10 @@ function ProfilePage() {
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     className={`mt-6 p-4 rounded-xl text-center font-medium ${saveMessage.includes('successfully')
-                                            ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border border-green-500/30' :
-                                            saveMessage.includes('Saving')
-                                                ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 border border-blue-500/30' :
-                                                'bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-300 border border-red-500/30'
+                                        ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border border-green-500/30' :
+                                        saveMessage.includes('Saving')
+                                            ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 border border-blue-500/30' :
+                                            'bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-300 border border-red-500/30'
                                         }`}
                                 >
                                     {saveMessage}
@@ -333,8 +309,6 @@ function ProfilePage() {
                                 </motion.button>
                             )}
                         </motion.div>
-
-                        {/* Skills & Interests */}
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -344,8 +318,8 @@ function ProfilePage() {
                             <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Skills & Interests</h2>
 
                             {[
-                                { icon: Target, label: 'Skills', field: 'skills', color: 'from-blue-500 to-cyan-500' },
-                                { icon: Star, label: 'Interests', field: 'interests', color: 'from-green-500 to-emerald-500' }
+                                { icon: Target, label: 'Skills', field: 'skills', color: 'from-purple-500 via-indigo-500 to-blue-500' },
+                                { icon: Star, label: 'Interests', field: 'interests', color: 'from-cyan-400 via-blue-400 to-indigo-400' }
                             ].map(({ icon: Icon, label, field, color }) => (
                                 <div key={field} className={field === 'skills' ? 'mb-8' : ''}>
                                     <div className="flex items-center space-x-3 mb-4">
@@ -356,9 +330,9 @@ function ProfilePage() {
                                     </div>
                                     {isEditing ? (
                                         <textarea
-                                            placeholder={`Enter ${label.toLowerCase()} separated by commas`}
-                                            value={Array.isArray(editForm[field]) ? editForm[field].join(', ') : ''}
-                                            onChange={(e) => handleArrayChange(field, e.target.value)}
+                                            placeholder={`Enter ${label.toLowerCase()}`}
+                                            value={rawInputs[field]}
+                                            onChange={(e) => handleRawInputChange(field, e.target.value)}
                                             className="w-full p-3 bg-gradient-to-br from-gray-700 to-gray-800 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 h-20 resize-none"
                                         />
                                     ) : (
@@ -381,8 +355,7 @@ function ProfilePage() {
                             ))}
                         </motion.div>
                     </div>
-
-                    {/* Purchased Courses */}
+                    
                     <div className="lg:col-span-2">
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
@@ -398,12 +371,10 @@ function ProfilePage() {
 
                             <div className="space-y-6">
                                 {userProfile.purchasedCourses?.length > 0 ? (
-                                    userProfile.purchasedCourses.map((course, index) => (
+                                    userProfile.purchasedCourses.map((course) => (
                                         <motion.div
-                                            key={course.id || index}
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: index * 0.1 }}
                                             whileHover={{ scale: 1.02 }}
                                             className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/30 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300 group"
                                         >
@@ -415,12 +386,6 @@ function ProfilePage() {
                                                     <p className="text-gray-300">Instructor: {course.instructor}</p>
                                                     <p className="text-sm text-gray-400">
                                                         Purchased: {new Date(course.purchaseDate).toLocaleDateString()}
-                                                    </p>
-                                                </div>
-                                                <div className="text-right">
-                                                    {getStatusBadge(course.status)}
-                                                    <p className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mt-2">
-                                                        {course.price}
                                                     </p>
                                                 </div>
                                             </div>
@@ -438,14 +403,14 @@ function ProfilePage() {
                                                 </div>
                                             </div>
 
-                                            {course.rating && (
+                                            {course.rating ? (
                                                 <div className="flex items-center">
                                                     <Star size={16} className="text-yellow-400 fill-yellow-400" />
                                                     <span className="ml-2 text-sm font-medium text-gray-300">
                                                         {course.rating}
                                                     </span>
                                                 </div>
-                                            )}
+                                            ) : null}
                                         </motion.div>
                                     ))
                                 ) : (

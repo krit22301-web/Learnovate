@@ -8,7 +8,6 @@ function Instructors() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white relative overflow-hidden">
       <div className="container mx-auto px-4 py-8 sm:py-12 relative z-10">
-        {/* Header */}
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
             Meet Our Expert Instructors
@@ -18,7 +17,6 @@ function Instructors() {
           </p>
         </div>
 
-        {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
           <div className="group bg-gradient-to-br from-gray-800 to-gray-900 p-4 sm:p-6 rounded-2xl shadow-lg text-center border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-300 hover:scale-105 hover:shadow-cyan-500/20">
             <Users className="mx-auto mb-3 text-cyan-400 group-hover:scale-110 transition-transform duration-300" size={28} />
@@ -48,7 +46,6 @@ function Instructors() {
           </div>
         </div>
 
-        {/* Instructors Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
           {instructors.map(instructor => (
             <div key={instructor.id} className="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-500 hover:scale-105 hover:shadow-cyan-500/20">

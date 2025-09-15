@@ -219,28 +219,28 @@ function CourseDetails() {
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-xl font-bold mb-4">Course Content</h3>
-              <div className="space-y-2 mb-6">
-                {course.modules.map((module, index) => (
-                  <div key={module.id} className={`flex justify-between items-center p-3 rounded-lg cursor-pointer transition-colors ${currentVideo.id === module.id ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'
-                    }`} onClick={() => handleVideoSelect(module)}>
-                    <div className="flex items-center flex-1">
-                      {module.free || isEnrolled ? (
-                        watchProgress[module.id] ?
-                          <CheckCircle size={16} className="mr-2 text-green-600" /> :
-                          <Play size={16} className="mr-2 text-blue-600" />
-                      ) : (
-                        <Lock size={16} className="mr-2 text-gray-400" />
-                      )}
-                      <div className="flex-1">
-                        <p className={`text-sm font-medium ${module.free || isEnrolled ? 'text-gray-900' : 'text-gray-500'}`}>
-                          {index + 1}. {module.title}
-                        </p>
-                        <p className="text-xs text-gray-500">{module.duration}</p>
-                      </div>
+            <div className="space-y-2 mb-6">
+              {course.modules.map((module, index) => (
+                <div key={module.id} className={`flex justify-between items-center p-3 rounded-lg cursor-pointer transition-colors ${currentVideo.id === module.id ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'
+                  }`} onClick={() => handleVideoSelect(module)}>
+                  <div className="flex items-center flex-1">
+                    {module.free || isEnrolled ? (
+                      watchProgress[module.id] ?
+                        <CheckCircle size={16} className="mr-2 text-green-600" /> :
+                        <Play size={16} className="mr-2 text-blue-600" />
+                    ) : (
+                      <Lock size={16} className="mr-2 text-gray-400" />
+                    )}
+                    <div className="flex-1">
+                      <p className={`text-sm font-medium ${module.free || isEnrolled ? 'text-gray-900' : 'text-gray-500'}`}>
+                        {index + 1}. {module.title}
+                      </p>
+                      <p className="text-xs text-gray-500">{module.duration}</p>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
+            </div>
             {!isEnrolled ? (
               <button onClick={handleEnrollment} disabled={isEnrolling}
                 className={`w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 ${course.free ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'

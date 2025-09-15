@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, User, Mail, Lock, UserPlus, AlertCircle, CheckCircle, BookOpen, Shield, Zap, Award } from 'lucide-react';
 
 export default function Register() {
@@ -8,6 +8,7 @@ export default function Register() {
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -16,7 +17,7 @@ export default function Register() {
     setMessage('');
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -32,6 +33,9 @@ export default function Register() {
         setErrors([]);
         setMessage('Registration successful! Please login.');
         setFormData({ username: '', email: '', password: '' });
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000);
       }
     } catch (error) {
       setErrors(['Network error. Please try again.']);
@@ -56,7 +60,6 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left Side - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
         <div className="w-full max-w-md">
           <div className="flex items-center justify-center mb-8 lg:hidden">
@@ -78,8 +81,8 @@ export default function Register() {
                 <div className="flex items-start">
                   <AlertCircle className="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    {errors.map((err, i) => (
-                      <p key={i} className="text-red-700 text-sm mb-1 last:mb-0">{err}</p>
+                    {errors.map((err, index) => (
+                      <p key={index} className="text-red-700 text-sm mb-1 last:mb-0">{err}</p>
                     ))}
                   </div>
                 </div>
@@ -162,7 +165,6 @@ export default function Register() {
         </div>
       </div>
 
-      {/* Right Side - Benefits Section */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-r from-gray-800 to-gray-900 text-white relative overflow-hidden">
         <div className="relative z-10 flex flex-col justify-center items-start p-12 text-white">
           <div className="flex items-center mb-8">
@@ -180,8 +182,8 @@ export default function Register() {
           </p>
           
           <div className="space-y-6">
-            {benefits.map((benefit, i) => (
-              <div key={i} className="flex items-start text-green-100">
+            {benefits.map((benefit, index) => (
+              <div key={index} className="flex items-start text-green-100">
                 <div className="flex-shrink-0 w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
                   <benefit.icon className={`w-6 h-6 ${benefit.color}`} />
                 </div>

@@ -77,7 +77,6 @@ function About() {
             </div>
           </div>
 
-
           <div className="group hover:scale-105 duration-500">
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-purple-500/50 shadow-lg hover:shadow-purple-500/20">
               <div className="bg-gradient-to-br from-purple-300 to-purple-600 p-4 rounded-full w-20 h-20 mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -108,7 +107,6 @@ function About() {
               </ul>
             </div>
           </div>
-
 
           <div className="group hover:scale-105 transition-all duration-500">
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-cyan-500/50 shadow-lg hover:shadow-cyan-500/20">

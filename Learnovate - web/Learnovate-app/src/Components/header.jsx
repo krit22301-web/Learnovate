@@ -9,9 +9,6 @@ function Header() {
 
   useEffect(() => {
     checkAuthStatus();
-  }, []);
-
-  useEffect(() => {
     setIsMenuOpen(false);
     setIsProfileDropdownOpen(false);
   }, []);
@@ -35,7 +32,7 @@ function Header() {
   };
 
   const handleLogout = async () => {
-    const response = await fetch('https://backend-test-k5py.onrender.com/user/logout', {
+    await fetch('https://backend-test-k5py.onrender.com/user/logout', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -71,7 +68,7 @@ function Header() {
               onClick={() => setIsMenuOpen(false)}
             >
               <div className="relative">
-                <BookOpen className={"w-8 h-8 transition-colors duration-300 text-cyan-400"}/>
+                <BookOpen className={"w-8 h-8 transition-colors duration-300 text-cyan-400"} />
                 <div className="absolute inset-0 bg-cyan-500 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
               </div>
               <span className="text-xl font-bold transition-colors duration-300 text-gray-100">
@@ -102,7 +99,7 @@ function Header() {
                       <span className="font-medium text-gray-300 group-hover:text-white">
                         {username}
                       </span>
-                      <ChevronDown className="w-4 h-4 text-gray-500 transition-transform duration-200"/>
+                      <ChevronDown className="w-4 h-4 text-gray-500 transition-transform duration-200" />
                     </button>
                     {isProfileDropdownOpen && (
                       <div className="absolute right-0 top-full mt-2 w-64 bg-gray-800 backdrop-blur-sm rounded-xl shadow-lg shadow-cyan-500/10 border border-gray-700/50 py-2 z-50">
@@ -163,8 +160,8 @@ function Header() {
           </div>
         </div>
         <div className={`lg:hidden transition-all duration-300 ease-in-out ${isMenuOpen
-            ? 'max-h-screen opacity-100'
-            : 'max-h-0 opacity-0 overflow-hidden'
+          ? 'max-h-screen opacity-100'
+          : 'max-h-0 opacity-0 overflow-hidden'
           }`}>
           <div className="bg-gray-800/95 backdrop-blur-sm border-t border-gray-700/50">
             <div className="container mx-auto px-4 py-4">
@@ -175,8 +172,8 @@ function Header() {
                     to={link.path}
                     onClick={() => setIsMenuOpen(false)}
                     className={`block px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${isActiveRoute(link.path)
-                        ? 'text-cyan-400 bg-cyan-900/30 border border-cyan-500/20'
-                        : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
+                      ? 'text-cyan-400 bg-cyan-900/30 border border-cyan-500/20'
+                      : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
                       }`}
                   >
                     {link.label}

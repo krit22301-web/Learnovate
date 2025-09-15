@@ -3,24 +3,6 @@ import { BookOpen, Users, Computer, ArrowRight, Play, Star, Award, Zap, Code, Pa
 import img from '../assets/code.jpeg'
 
 function Home() {
-  const paintReveal = useCallback((x, y, canvas = null) => {
-    const targetCanvas = canvas;
-    if (!targetCanvas) return;
-
-    const ctx = targetCanvas.getContext('2d');
-    ctx.globalCompositeOperation = 'destination-out';
-    const gradient = ctx.createRadialGradient(x, y, 0, x, y, 40);
-    gradient.addColorStop(0, 'rgba(0,0,0,1)');
-    gradient.addColorStop(0.7, 'rgba(0,0,0,0.8)');
-    gradient.addColorStop(1, 'rgba(0,0,0,0)');
-
-    ctx.fillStyle = '#000000';
-    ctx.beginPath();
-    ctx.arc(x, y, 40, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.globalCompositeOperation = 'source-over';
-  }, []);
-
   const features = [
     {
       icon: <Computer size={48} className="text-cyan-400" />,
@@ -153,43 +135,14 @@ function Home() {
               Explore our diverse range of subjects and find the perfect course for your cosmic journey
             </p>
           </div>
-
-          {/* Split Layout: Image Reveal + Categories */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-            {/* Left Side: Image Reveal Section */}
             <div className="relative w-full h-96 rounded-2xl overflow-hidden shadow-2xl order-2 lg:order-1">
               <img
                 src={img}
                 alt="Categories showcase"
-                className="w-full h-full object-cover"
-              />
-              {/* Gradient overlay canvas for reveal effect */}
-              // Fixed canvas initialization section
-              <canvas
-                ref={(el) => {
-                  if (el && !el.dataset.initialized) {
-                    el.dataset.initialized = 'true';
-                    const ctx = el.getContext('2d');
-                    el.width = el.offsetWidth;
-                    el.height = el.offsetHeight;
-                    ctx.fillStyle = '#000000';
-                    ctx.fillRect(0, 0, el.width, el.height); 
-                  }
-                }}
-                className="absolute inset-0 w-full h-full cursor-none"
-                onMouseMove={(e) => {
-                  const canvas = e.currentTarget;
-                  const rect = canvas.getBoundingClientRect();
-                  const x = e.clientX - rect.left;
-                  const y = e.clientY - rect.top;
-                  paintReveal(x, y, canvas);
-                }}
-                style={{ touchAction: 'none' }}
-              />
+                className="w-full h-full object-cover" />
             </div>
 
-            {/* Right Side: Categories Grid */}
             <div className="order-1 lg:order-2">
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {categories.map((category, index) => (

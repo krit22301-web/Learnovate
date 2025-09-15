@@ -10,22 +10,22 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors([]);
   };
 
-  const handleSubmit = async (e) => { 
+  const handleSubmit = async (e) => {
     (e).preventDefault();
     setIsLoading(true);
     try {
-      const res = await fetch('https://backend-test-k5py.onrender.com/user/login', {
+      const response = await fetch('https://backend-test-k5py.onrender.com/user/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (!res.ok) {
+      const data = await response.json();
+      if (!response.ok) {
         setErrors([data.message || 'Login failed']);
       } else {
         localStorage.setItem('username', data.user.username);
@@ -58,12 +58,12 @@ export default function Login() {
             Welcome Back to Your Learning Journey
           </h2>
           <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-            Continue exploring thousands of courses from world-class instructors. 
+            Continue exploring thousands of courses from world-class instructors.
             Your next skill is just a login away.
           </p>
           <div className="space-y-4">
-            {features.map((feature, i) => (
-              <div key={i} className="flex items-center text-blue-100">
+            {features.map((feature, index) => (
+              <div key={index} className="flex items-center text-blue-100">
                 <div className={`w-2 h-2 ${feature.color} rounded-full mr-4`}></div>
                 <span>{feature.text}</span>
               </div>

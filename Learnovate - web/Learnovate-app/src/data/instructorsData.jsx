@@ -132,9 +132,9 @@ export const instructorsData = {
     students: 30000,
     expertise: ["Network Security", "Threat Analysis", "Penetration Testing", "Security Architecture"]
   },
-  "Olivi White": {
+  "Oliv White": {
     id: 11,
-    name: "Olivi White",
+    name: "Oliv White",
     specialty: "Creative Writing",
     bio: "Published author and writing workshop facilitator. Has helped hundreds of aspiring writers develop their craft and find their voice.",
     image: whiteimage,
@@ -156,10 +156,6 @@ export const instructorsData = {
     students: 120000,
     expertise: ["JavaScript", "ES6+", "Node.js", "React", "Vue.js", "TypeScript"]
   }
-};
-
-export const getInstructorByName = (name) => {
-  return instructorsData[name] || null;
 };
 
 export const getAllInstructors = () => {

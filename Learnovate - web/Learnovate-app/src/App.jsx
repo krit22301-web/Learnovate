@@ -12,24 +12,15 @@ import Signup from './Components/signup';
 import ProfilePage from './Components/profilepage';
 import ScrollToTop from './Components/scrolltop';
 
-function App() {
-  return (
-    <Router>
-      <ScrollToTop />
-      <AppContent />
-    </Router>
-  );
-}
-
 function AppContent() {
   const location = useLocation();
   const isAuthPage = ['/login', '/signup'].includes(location.pathname);
-  const isCourseDetails = location.pathname.startsWith('/course/');
+  const isCourseDetails = location.pathname.includes('/course/');
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div>
       {!isAuthPage && <Header />}
-      <main className="flex-grow">
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/instructors" element={<Instructors />} />
@@ -43,6 +34,15 @@ function AppContent() {
       </main>
       {!isAuthPage && !isCourseDetails && <Footer />}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <ScrollToTop />
+      <AppContent />
+    </Router>
   );
 }
 

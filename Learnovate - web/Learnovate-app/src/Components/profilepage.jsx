@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, MapPin, School, BookOpen, Star, Calendar, Edit3, Save, X, Award, Target, ShoppingCart, CheckCircle } from 'lucide-react';
+import { User, Mail, Phone, MapPin, School, BookOpen, Star, Calendar, Edit3, Save, X, Award, Target, ShoppingCart } from 'lucide-react';
 
-const URL = 'https://backend-test-k5py.onrender.com';
 
 function ProfilePage() {
     const [isEditing, setIsEditing] = useState(false);
@@ -35,15 +34,15 @@ function ProfilePage() {
     useEffect(() => {
         if (isEditing) {
             setRawInputs({
-                skills: Array.isArray(editForm.skills) ? editForm.skills.join(', ') : '',
-                interests: Array.isArray(editForm.interests) ? editForm.interests.join(', ') : ''
+                skills: editForm.skills.join(', '),
+                interests: editForm.interests.join(', ')
             });
         }
     }, [isEditing]);
 
     const fetchUserProfile = async () => {
         setIsLoadingProfile(true);
-        const response = await fetch(`${URL}/user/profile`, {
+        const response = await fetch("https://backend-test-k5py.onrender.com/user/profile", {
             method: 'GET',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' }
@@ -51,19 +50,23 @@ function ProfilePage() {
         if (response.ok) {
             const data = await response.json();
             setUserProfile(data.profile);
-            setEditForm(data.profile);
         }
         setIsLoadingProfile(false);
+    };
+
+    const handleEdit = () => {
+        setIsEditing(true);
+        setEditForm({ ...userProfile });
     };
 
     const handleSave = async () => {
         try {
             setSaveMessage('Saving...');
             setError('');
-            const processedSkills = rawInputs.skills.split(',').map(item => item.trim()).filter(Boolean);
-            const processedInterests = rawInputs.interests.split(',').map(item => item.trim()).filter(Boolean);
+            const processedSkills = rawInputs.skills.split(',').map(item => item.trim());
+            const processedInterests = rawInputs.interests.split(',').map(item => item.trim());
 
-            const response = await fetch(`${URL}/user/profile`, {
+            const response = await fetch("https://backend-test-k5py.onrender.com/user/profile", {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -97,11 +100,6 @@ function ProfilePage() {
         }
     };
 
-    const handleEdit = () => {
-        setIsEditing(true);
-        setEditForm({ ...userProfile });
-    };
-
     const handleCancel = () => {
         setEditForm({ ...userProfile });
         setIsEditing(false);
@@ -115,12 +113,9 @@ function ProfilePage() {
     const handleInputChange = (field, value) => {
         setEditForm({ ...editForm, [field]: value });
     };
+
     const handleRawInputChange = (field, value) => {
         setRawInputs({ ...rawInputs, [field]: value });
-    };
-    const processArrayField = (field, value) => {
-        const array = value.split(',').map(item => item.trim()).filter(Boolean);
-        setEditForm({ ...editForm, [field]: array });
     };
 
     const getProgressColor = (progress) => {
@@ -129,7 +124,7 @@ function ProfilePage() {
         return 'bg-gradient-to-r from-cyan-400 to-blue-500';
     };
 
-    const activeCourses = userProfile.purchasedCourses?.filter(c => c.status === 'in-progress').length || 0;
+    const activeCourses = userProfile.purchasedCourses.filter(c => c.status === 'in-progress').length || 0;
 
     if (isLoadingProfile) {
         return (
@@ -154,11 +149,7 @@ function ProfilePage() {
                         {error}
                     </motion.div>
                 )}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700/50 p-8 mb-8"
-                >
+                <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700/50 p-8 mb-8">
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
                         <div className="flex items-center space-x-6 mb-4 md:mb-0">
                             <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
@@ -184,7 +175,6 @@ function ProfilePage() {
                         </div>
                         <motion.button
                             whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
                             onClick={isEditing ? handleCancel : handleEdit}
                             className="flex items-center px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 rounded-xl transition-all duration-300 border border-gray-600/50 hover:border-cyan-500/50"
                         >
@@ -205,12 +195,11 @@ function ProfilePage() {
                         {[
                             { icon: BookOpen, label: 'Completed Courses', value: userProfile.completedCourses || 0, color: 'from-blue-500 to-cyan-500' },
                             { icon: Award, label: 'Active Courses', value: activeCourses, color: 'from-purple-500 to-pink-500' }
-                        ].map((stat, index) => (
+                        ].map((stat) => (
                             <motion.div
                                 key={stat.label}
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: -20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
                                 className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-gray-700/30"
                             >
                                 <div className="flex items-center space-x-4">
@@ -225,10 +214,9 @@ function ProfilePage() {
                             </motion.div>
                         ))}
                     </div>
-                </motion.div>
+                </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Personal Information */}
                     <div className="lg:col-span-1 space-y-6">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
@@ -355,7 +343,7 @@ function ProfilePage() {
                             ))}
                         </motion.div>
                     </div>
-                    
+
                     <div className="lg:col-span-2">
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
@@ -370,7 +358,7 @@ function ProfilePage() {
                             </div>
 
                             <div className="space-y-6">
-                                {userProfile.purchasedCourses?.length > 0 ? (
+                                {userProfile.purchasedCourses.length > 0 ? (
                                     userProfile.purchasedCourses.map((course) => (
                                         <motion.div
                                             initial={{ opacity: 0, y: 20 }}

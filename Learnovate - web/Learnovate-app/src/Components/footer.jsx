@@ -25,8 +25,8 @@ function Footer() {
     { name: 'Facebook', icon: <Facebook size={20} />, url: '#', color: 'hover:text-blue-400' },
     { name: 'Twitter', icon: <Twitter size={20} />, url: '#', color: 'hover:text-sky-400' },
     { name: 'Instagram', icon: <Instagram size={20} />, url: '#', color: 'hover:text-pink-500' },
-    { name: 'LinkedIn', icon: <Linkedin size={20} />, url: '#', color: 'hover:text-blue-600' },
-    { name: 'GitHub', icon: <Github size={20} />, url: '#', color: 'hover:text-blue-900' }
+    { name: 'LinkedIn', icon: <Linkedin size={20} />, url: 'https://www.linkedin.com/in/sarthak-bhatnagar-05b177247/', color: 'hover:text-blue-600' },
+    { name: 'GitHub', icon: <Github size={20} />, url: 'https://github.com/sarthakbhatnagar2002', color: 'hover:text-blue-900' }
   ];
 
   const stats = [
@@ -159,10 +159,6 @@ function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center text-gray-400 mb-4 md:mb-0">
               <span>© {new Date().getFullYear()} Learnovate. All Rights Reserved.</span>
-              <span className="mx-2">•</span>
-              <span className="flex items-center">
-                Made with <Heart className="w-4 h-4 mx-1 text-red-500" /> in India
-              </span>
             </div>
 
             <div className="flex items-center space-x-6 text-sm text-gray-400">

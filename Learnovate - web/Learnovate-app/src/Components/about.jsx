@@ -1,9 +1,11 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Target, Globe, Telescope } from 'lucide-react';
 import p1 from '../assets/pfp-1.jpg'
 import p2 from '../assets/pfp-2.jpg'
 import p3 from '../assets/pfp-3.jpg'
 import p4 from '../assets/pfp-4.jpg'
+
 
 function About() {
   const reviews = [
@@ -37,17 +39,24 @@ function About() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
       <div className="container mx-auto px-4 py-8">
 
-        <div className="text-center mb-12">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
           <h1 className="text-3xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-200 to-purple-900 bg-clip-text text-transparent">
             About Learnovate
           </h1>
           <p className="text-lg max-w-3xl mx-auto text-gray-300">
             Revolutionizing education by bringing cutting-edge knowledge and skills to learners worldwide through innovative technology and expert instruction.
           </p>
-        </div>
-
+        </motion.div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-          <div className="group hover:scale-105 duration-500">
+          <motion.div 
+            className="group hover:scale-105 duration-500"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-cyan-500/50 shadow-lg hover:shadow-cyan-500/20">
               <div className="bg-gradient-to-br from-cyan-300 to-cyan-600 p-4 rounded-full w-20 h-20 mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Target className="w-12 h-12 text-white" />
@@ -75,9 +84,13 @@ function About() {
                 </li>
               </ul>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="group hover:scale-105 duration-500">
+          <motion.div 
+            className="group hover:scale-105 duration-500"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-purple-500/50 shadow-lg hover:shadow-purple-500/20">
               <div className="bg-gradient-to-br from-purple-300 to-purple-600 p-4 rounded-full w-20 h-20 mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Globe className="w-12 h-12 text-white" />
@@ -106,9 +119,13 @@ function About() {
                 </li>
               </ul>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="group hover:scale-105 transition-all duration-500">
+          <motion.div 
+            className="group hover:scale-105 transition-all duration-500"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl text-center h-full border border-gray-700/50 hover:border-cyan-500/50 shadow-lg hover:shadow-cyan-500/20">
               <div className="bg-gradient-to-br from-cyan-500 to-purple-500 p-4 rounded-full w-20 h-20 mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Telescope className="w-12 h-12 text-white" />
@@ -140,7 +157,7 @@ function About() {
                 </li>
               </ul>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         <div className="text-center mb-12">
@@ -164,7 +181,9 @@ function About() {
                     alt={review.name}
                     className="w-20 h-20 rounded-full object-cover mb-4 border-4 border-gradient-to-r from-cyan-400 to-purple-400 group-hover:scale-110 transition-transform duration-300"
                   />
-                  <h3 className="text-xl font-bold mb-3 text-white">{review.name}</h3>
+                  <h3 className="text-xl font-bold mb-3 text-white">
+                    {review.name}
+                  </h3>
                   <p className="text-gray-300 leading-relaxed">
                     {review.text}
                   </p>

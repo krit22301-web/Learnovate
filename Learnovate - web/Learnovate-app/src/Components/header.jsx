@@ -5,6 +5,7 @@ import { BookOpen, Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [username, setUsername] = useState(localStorage.getItem('username'));
+  const [email, setEmail] = useState(localStorage.getItem('email'));
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -24,10 +25,13 @@ function Header() {
     if (response.ok) {
       const data = await response.json();
       setUsername(data.user.username);
+      setEmail(data.user.email);
       localStorage.setItem('username', data.user.username);
+      localStorage.setItem('email', data.user.email);
     } else {
       setUsername(null);
       localStorage.removeItem('username');
+      localStorage.removeItem('email');
     }
   };
 
@@ -40,7 +44,9 @@ function Header() {
       }
     });
     setUsername(null);
+    setEmail(null);
     localStorage.removeItem('username');
+    localStorage.removeItem('email');
     setIsMenuOpen(false);
     setIsProfileDropdownOpen(false);
     window.location.href = '/';
@@ -105,7 +111,7 @@ function Header() {
                       <div className="absolute right-0 top-full mt-2 w-64 bg-gray-800 backdrop-blur-sm rounded-xl shadow-lg shadow-cyan-500/10 border border-gray-700/50 py-2 z-50">
                         <div className="px-4 py-3 border-b border-gray-700/50">
                           <p className="font-semibold text-white">{username}</p>
-                          <p className="text-sm text-gray-400">learner@Learnovate.com</p>
+                          <p className="text-sm text-gray-400">{email}</p>
                         </div>
                         <Link
                           to="/profilepage"
@@ -119,7 +125,7 @@ function Header() {
                         <div className="border-t border-gray-700/50 mt-2 pt-2">
                           <button
                             onClick={handleLogout}
-                            className="flex items-center w-full px-4 py-3 text-red-400 hover:bg-red-900/20 hover:text-red-300 transition-colors duration-200"
+                            className="flex items-center w-full px-4 py-3 text-red-400 hover:bg-red-800/20 hover:text-red-300 transition-colors duration-200"
                           >
                             <LogOut className="w-4 h-4 mr-3" />
                             Sign Out
@@ -201,8 +207,7 @@ function Header() {
                       My Profile
                     </Link>
                     <button
-                      onClick={handleLogout}
-                      className="flex items-center w-full px-4 py-3 text-red-400 hover:bg-red-900/20 hover:text-red-300 rounded-lg transition-colors duration-200"
+                      onClick={handleLogout} className="flex items-center w-full px-4 py-3 text-red-400 hover:bg-red-900/20 hover:text-red-300 rounded-lg transition-colors duration-200"
                     >
                       <LogOut className="w-4 h-4 mr-3" />
                       Sign Out

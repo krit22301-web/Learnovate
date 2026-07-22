@@ -167,8 +167,7 @@ function Header() {
         </div>
         <div className={`lg:hidden transition-all duration-300 ease-in-out ${isMenuOpen
           ? 'max-h-screen opacity-100'
-          : 'max-h-0 opacity-0 overflow-hidden'
-          }`}>
+          : 'max-h-0 opacity-0 overflow-hidden'}`}>
           <div className="bg-gray-800/95 backdrop-blur-sm border-t border-gray-700/50">
             <div className="container mx-auto px-4 py-4">
               <nav className="space-y-1 mb-6">
@@ -179,8 +178,7 @@ function Header() {
                     onClick={() => setIsMenuOpen(false)}
                     className={`block px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${isActiveRoute(link.path)
                       ? 'text-cyan-400 bg-cyan-900/30 border border-cyan-500/20'
-                      : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
-                      }`}
+                      : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'}`}
                   >
                     {link.label}
                   </Link>

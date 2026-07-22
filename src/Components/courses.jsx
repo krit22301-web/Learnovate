@@ -1,13 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Search, Filter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { courses } from '../data/coursedata';
 
+const YT_API_KEY = import.meta.env.VITE_YT_API_KEY;
+const YT_API_BASE = 'https://www.googleapis.com/youtube/v3';
+
+// Fetches a playlist's own thumbnail in a single API call (cheaper than
+// pulling every video just to grab an image).
+async function fetchPlaylistThumbnail(playlistId) {
+  try {
+    const url = `${YT_API_BASE}/playlists?part=snippet&id=${playlistId}&key=${YT_API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.error || !data.items?.length) {
+      return null;
+    }
+
+    const thumbnails = data.items[0].snippet.thumbnails;
+    return thumbnails?.high?.url || thumbnails?.medium?.url || thumbnails?.default?.url || null;
+  } catch (error) {
+    console.error('Error fetching playlist thumbnail:', error);
+    return null;
+  }
+}
+
 function Courses() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
+  const [playlistThumbnails, setPlaylistThumbnails] = useState({});
+  const [courseStatuses, setCourseStatuses] = useState({}); // { [courseId]: boolean enrolled }
+  const [isSignedIn, setIsSignedIn] = useState(null); // null = still checking
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const coursesWithPlaylists = courses.filter((c) => c.playlistId);
+
+    coursesWithPlaylists.forEach((course) => {
+      fetchPlaylistThumbnail(course.playlistId).then((url) => {
+        if (url) {
+          setPlaylistThumbnails((prev) => ({ ...prev, [course.id]: url }));
+        }
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    courses.forEach((course) => {
+      fetch(`https://backend-test-k5py.onrender.com/user/course-status/${course.id}`, {
+        method: 'GET',
+        credentials: 'include'
+      })
+        .then(async (response) => {
+          if (response.ok) {
+            const data = await response.json();
+            setIsSignedIn(true);
+            setCourseStatuses((prev) => ({ ...prev, [course.id]: !!data.enrolled }));
+          } else {
+            setIsSignedIn((prev) => (prev === true ? prev : false));
+          }
+        })
+        .catch(() => {
+          setIsSignedIn((prev) => (prev === true ? prev : false));
+        });
+    });
+  }, []);
 
   const filteredCourses = courses.filter((course) =>
     course.title.toLowerCase().includes(search.toLowerCase()) &&
@@ -67,14 +126,20 @@ function Courses() {
             >
               <div className="relative overflow-hidden">
                 <img
-                  src={course.cover}
+                  src={playlistThumbnails[course.id] || course.cover}
                   alt={course.title}
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute top-4 right-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${course.free ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white' : 'bg-purple-500 text-white'}`}>
-                    {course.free ? 'FREE' : `$${course.price}`}
-                  </span>
+                  {isSignedIn ? (
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${courseStatuses[course.id] ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white' : 'bg-gray-600 text-white'}`}>
+                      {courseStatuses[course.id] ? 'Enrolled' : 'Not Enrolled'}
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-purple-500 text-white">
+                      Enroll!
+                    </span>
+                  )}
                 </div>
               </div>
 

@@ -52,11 +52,12 @@ function Instructors() {
 
           {instructors.map(instructor => (
             <motion.div
+              key={instructor.id}
               className="text-center mb-12"
               initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <div key={instructor.id} className="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-500 hover:scale-105 hover:shadow-cyan-500/20">
+              <div className="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-500 hover:scale-105 hover:shadow-cyan-500/20">
                 <div className="relative p-6 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-medium rounded-lg hover:from-gray-700 hover:to-gray-800 border border-gray-700/50 hover:border-gray-600">
                   <div className="flex items-start space-x-4">
                     <div className="relative">

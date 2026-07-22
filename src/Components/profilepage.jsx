@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, MapPin, School, BookOpen, Star, Calendar, Edit3, Save, X, Award, Target, ShoppingCart } from 'lucide-react';
+import { BookOpen, Star, Calendar, User, Mail, Phone, MapPin, School, Edit3, Save, X, Award, Target, ShoppingCart } from 'lucide-react';
 
 
 function ProfilePage() {
